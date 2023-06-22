@@ -1,6 +1,10 @@
 To run:
-
     Backend:
-        `cd backend && python main.py`
+        `cd backend`
+        `pip install -r requirements.txt`
+        `python main.py`
+
     Frontend:
-        `cd frontend && npm start`
+        `cd frontend`
+        `npm install`
+        `npm start`
