@@ -28,38 +28,6 @@ const convertFormToModel = (form: UserRegisterForm) => {
     }
 }
 
-const stringContainsOneOf = (str: string, set: string) => {
-    const chars = [...set];
-    for (const char in chars) {
-        if (str.includes(char)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-const validateUserRegister = (userRegister: UserRegister) => {
-    const username = userRegister.username;
-    const password = userRegister.password;
-    const password2 = userRegister.password2;
-    const validSet =  '!@#$%^&*()<>,.;:"\'[]{}=-0987654321' ;
-    const passwordRequirements = "Please enter a password of at least 8 characters with one special character " + 
-        "in the set " + validSet;
-    if (password !== password2) {
-        alert("Please ensure that your passwords match!");
-        return false;
-    }
-    if (username.length < 1) {
-        alert("Please enter a username");
-        return false;
-    }
-    if (password.length < 8 || !stringContainsOneOf(password, validSet)) {
-        alert(passwordRequirements);
-        return false;
-    }
-    return true;
-}
-
 const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.SyntheticEvent) => {
     e.preventDefault();
     const target = e.target as typeof e.target & UserRegisterForm;
@@ -69,10 +37,6 @@ const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Sy
         password2: {value: target.password2.value},
     };
     const userRegister = convertFormToModel(userRegisterForm);
-
-    if (!validateUserRegister(userRegister)) {
-        return;
-    }
     axios.post(`${backendurl}/create_user`, userRegister)
         .then(response => {
             const data = response.data as UserRegisterResponse
@@ -83,7 +47,16 @@ const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Sy
                 alert('Successfully created a user!');
             }
         })
-        .catch(e => console.log(e));
+        .catch(e => {
+            if (e.response.status == 422) {
+                alert("Error creating user. Please ensure that all fields are populated, that "
+                     + "your passwords match, and that your password contains at least one special character"
+                     )
+            }
+            else {
+                console.log(e)
+            }
+        });
 }
 
 const LoginPage: React.FunctionComponent = () => {

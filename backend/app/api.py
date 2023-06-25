@@ -10,16 +10,7 @@ class BackendStub:
     # Will need to actually update DB, as well as deal with/return errors
     @staticmethod
     def add_user_profile(user_profile: UserRegister) -> UserRegisterResponse:
-        if not user_profile.is_valid():
-            return UserRegisterResponse(
-                status=False,
-                text="Error: User profile is not valid"
-            )
-        else:
-            return UserRegisterResponse(
-                status=True,
-                text=""
-            )
+        return UserRegisterResponse(status=True, text="")
 
 
 app = FastAPI()
