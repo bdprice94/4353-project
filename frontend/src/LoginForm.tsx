@@ -44,7 +44,7 @@ const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Sy
             }
         })
         .catch(e => {
-            if (e.response.status == 422) {
+            if (e.response.status === 422) {
                 const errString = e.response.data.detail
                     .map((err: any) => err.msg)
                     .join('\n');
