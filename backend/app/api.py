@@ -1,10 +1,11 @@
-import os
-from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from table_defs.user_register import UserRegister, UserRegisterResponse
 from table_defs.user_login import UserLogin, UserLoginResponse
+
+import sqlalchemy
+from sqlalchemy import text
+from .database.db_manager import get_engine
 
 
 class BackendStub:
@@ -20,25 +21,18 @@ class BackendStub:
         return UserLoginResponse(status=True, text="")
 
 
+db_engine = get_engine()
 app = FastAPI()
-
-origins = [
-    "http://localhost:3000",
-    "localhost:3000"
-]
+origins = ["*"]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
-# ideally there would be a proper place to store build artifacts for deployment
-# but for now this is just to mess around with since I'm bored
-Path("../frontend/build").mkdir(parents=True, exist_ok=True)
-build_dir = os.path.abspath('../frontend/build')
-app.mount("/static_test", StaticFiles(directory=build_dir), name="static_test")
 
 
 @app.get("/", tags=["root"])
@@ -47,9 +41,57 @@ async def read_root() -> dict:
 
 
 @app.post("/create_user", tags=["create_user"])
-async def post_user_profile(user_profile: UserRegister) -> UserRegisterResponse:
+async def post_user_profile(user_profile: UserRegister):
     return BackendStub.add_user_profile(user_profile)
 
+
 @app.post("/login", tags=["login"])
-async def post_user_login(user_login: UserLogin) -> UserLoginResponse:
+async def post_user_login(user_login: UserLogin):
     return BackendStub.attempt_user_login(user_login)
+
+
+@app.get("/database/tables")
+async def get_database_tables():
+    inspection = sqlalchemy.inspect(db_engine)
+    db_names = inspection.get_table_names()
+
+    return db_names
+
+
+@app.post("/database/create_user_table")
+async def create_user_table():
+    with db_engine.connect() as connection:
+        query = "CREATE TABLE users (id int, name varchar(255))"
+        connection.execute(text(query))
+        connection.commit()
+        connection.close()
+
+    return "Done"
+
+
+@app.post("/database/create_user")
+async def create_user(username: str):
+    with db_engine.connect() as connection:
+        query = text(f"INSERT INTO users (id, name) VALUES (0, '{username}')")
+        result = connection.execute(query)
+        print(result)
+        connection.commit()
+        connection.close()
+
+    return "Done inserting"
+
+
+@app.get("/database/get_users")
+async def get_users():
+    with db_engine.connect() as connection:
+        query = text(f"SELECT * FROM users")
+        result = connection.execute(query)
+        users = result.fetchall()
+        usernames = []
+        for (id, user) in users:
+            usernames.append(user)
+
+        connection.commit()
+        connection.close()
+
+    return usernames
