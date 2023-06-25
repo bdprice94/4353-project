@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from table_defs.user_register import UserRegister, UserRegisterResponse
+from table_defs.user_login import UserLogin, UserLoginResponse
 
 
 class BackendStub:
@@ -11,6 +12,12 @@ class BackendStub:
     @staticmethod
     def add_user_profile(user_profile: UserRegister) -> UserRegisterResponse:
         return UserRegisterResponse(status=True, text="")
+
+    @staticmethod
+    def attempt_user_login(user_login: UserLogin) -> UserLoginResponse:
+        if user_login.username != "Ben":
+            return UserLoginResponse(status=False, text="User does not exist")
+        return UserLoginResponse(status=True, text="")
 
 
 app = FastAPI()
@@ -42,3 +49,7 @@ async def read_root() -> dict:
 @app.post("/create_user", tags=["create_user"])
 async def post_user_profile(user_profile: UserRegister) -> UserRegisterResponse:
     return BackendStub.add_user_profile(user_profile)
+
+@app.post("/login", tags=["login"])
+async def post_user_login(user_login: UserLogin) -> UserLoginResponse:
+    return BackendStub.attempt_user_login(user_login)
