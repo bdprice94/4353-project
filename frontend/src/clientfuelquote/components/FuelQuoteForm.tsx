@@ -24,8 +24,7 @@ const FuelQuoteForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Quantity:", quanity);
-    console.log("Email:", email);
+  
     // Add your logic here to handle the form submission
   };
 
