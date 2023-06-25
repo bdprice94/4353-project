@@ -1,7 +1,9 @@
 Database:
-    To get the database installed go to [the postgress website](https://www.postgresql.org/download/)
-    Then, to initialize you need to run this in the top level folder.
-    `pg_ctl -D db_data -l db_logs init`
+    To get the database installed go to [the postgress website](https://www.postgresql.org/download/).
+    Then, to initialize you need to run the following in the top level folder.
+    
+    pg_ctl -D db_data -l db_logs init
+    
     You only need to do the above once.
 
     Finally, make sure to run this in the top level folder.
