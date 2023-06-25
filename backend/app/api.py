@@ -3,6 +3,14 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from table_defs.user_register import UserRegister
+
+
+class BackendStub:
+    # Will need to actually update DB, as well as deal with/return errors
+    @staticmethod
+    def add_user_profile(user_profile: UserRegister) -> bool:
+        return True
 
 
 app = FastAPI()
@@ -29,3 +37,11 @@ app.mount("/static_test", StaticFiles(directory=build_dir), name="static_test")
 @app.get("/", tags=["root"])
 async def read_root() -> dict:
     return {"message": "Welcome to your todo list"}
+
+
+@app.post("/create_user", tags=["create_user"])
+async def post_user_profile(user_profile: UserRegister) -> bool:
+    if not user_profile.is_valid():
+        return False
+    else:
+        return BackendStub.add_user_profile(user_profile)
