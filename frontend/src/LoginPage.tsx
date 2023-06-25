@@ -49,9 +49,10 @@ const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Sy
         })
         .catch(e => {
             if (e.response.status == 422) {
-                alert("Error creating user. Please ensure that all fields are populated, that "
-                     + "your passwords match, and that your password contains at least one special character"
-                     )
+                const errString = e.response.data.detail
+                    .map((err: any) => err.msg)
+                    .join('\n');
+                alert(errString)
             }
             else {
                 console.log(e)
