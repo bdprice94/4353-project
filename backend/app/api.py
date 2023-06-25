@@ -3,14 +3,23 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from table_defs.user_register import UserRegister
+from table_defs.user_register import UserRegister, UserRegisterResponse
 
 
 class BackendStub:
     # Will need to actually update DB, as well as deal with/return errors
     @staticmethod
-    def add_user_profile(user_profile: UserRegister) -> bool:
-        return True
+    def add_user_profile(user_profile: UserRegister) -> UserRegisterResponse:
+        if not user_profile.is_valid():
+            return UserRegisterResponse(
+                status=False,
+                text="Error: User profile is not valid"
+            )
+        else:
+            return UserRegisterResponse(
+                status=True,
+                text=""
+            )
 
 
 app = FastAPI()
@@ -40,8 +49,5 @@ async def read_root() -> dict:
 
 
 @app.post("/create_user", tags=["create_user"])
-async def post_user_profile(user_profile: UserRegister) -> bool:
-    if not user_profile.is_valid():
-        return False
-    else:
-        return BackendStub.add_user_profile(user_profile)
+async def post_user_profile(user_profile: UserRegister) -> UserRegisterResponse:
+    return BackendStub.add_user_profile(user_profile)

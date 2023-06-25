@@ -1,22 +1,22 @@
 from pydantic import BaseModel
-from functools import reduce
 
 
 class UserRegister(BaseModel):
-    username: str
-    password: str
-
-    @staticmethod
-    def _password_validator(b: bool, c: str) -> bool:
-        if b:
-            return True
-        if c < "!@#$%^&*()<>,.;:'[]{}=-0987654321":
-            return False
-        return True
+    username:  str
+    password:  str
+    password2: str
 
     def is_valid(self) -> bool:
         if len(self.username) < 1:
             return False
         if len(self.password) < 8:
             return False
-        return reduce(self._password_validator, self.password)
+        for char in self.password:
+            if char in "!@#$%^&*()<>,.;:'[]{}=-0987654321":
+                return True
+        return False
+
+
+class UserRegisterResponse(BaseModel):
+    status: bool
+    text: str
