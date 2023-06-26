@@ -7,7 +7,7 @@ from app.api import deps
 router = APIRouter()
 
 
-@router.post("/users/create_user_table")
+@router.post("/create_user_table")
 async def create_user_table(db: Session = Depends(deps.get_session)):
     query = "CREATE TABLE users (id int, name varchar(255))"
     db.execute(text(query))
@@ -16,7 +16,7 @@ async def create_user_table(db: Session = Depends(deps.get_session)):
     return "Done"
 
 
-@router.post("/users/create_user")
+@router.post("/create_user")
 async def create_user(username: str, db: Session = Depends(deps.get_session)):
     query = text(f"INSERT INTO users (id, name) VALUES (0, '{username}')")
     db.execute(query)
@@ -25,7 +25,7 @@ async def create_user(username: str, db: Session = Depends(deps.get_session)):
     return "Done inserting"
 
 
-@router.get("/users/get_users")
+@router.get("/get_users")
 async def get_users(db: Session = Depends(deps.get_session)):
     query = text(f"SELECT * FROM users")
     result = db.execute(query)
