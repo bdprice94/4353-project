@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 from sqlalchemy_utils import database_exists, create_database
 
-database_url = 'postgresql+psycopg2://localhost/db'
+database_url = 'postgresql://localhost/db'
 
 
 def get_engine() -> Engine:
