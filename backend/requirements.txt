@@ -11,3 +11,4 @@ uvicorn==0.22.0
 SQLAlchemy==2.0.16
 SQLAlchemy-Utils==0.41.1
 psycopg2==2.9.6
+alembic==1.11.1

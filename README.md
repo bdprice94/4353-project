@@ -10,6 +10,10 @@ Database:
     `pg_ctl -D ./db_data -l db_logs start` to start
     `pg_ctl -D ./db_data stop` to stop
 
+    Now, to run migrations once the database has started:
+    `cd backend`
+    `alembic upgrade head`
+
 Backend:
     `cd backend`
     `pip install -r requirements.txt`
