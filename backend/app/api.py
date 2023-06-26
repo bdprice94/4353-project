@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import sqlalchemy
 from sqlalchemy import text
-from .database.db_manager import get_engine
+from ..database.db_manager import get_engine
 
 db_engine = get_engine()
 
