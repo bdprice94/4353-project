@@ -1,35 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const backendurl = "http://localhost:8000" // will need to read from env if we need to host this
-
-export interface Payload {
-    message: string;
+export interface User {
+    id: number;
+    email: string;
 }
 
-
 const BackendSample: React.FunctionComponent = () => {
+    const [users, setUsers] = useState<User[]>([]);
 
-    const [text, setText] = useState<Payload>({message: ""})
     useEffect(() => {
-        async function getText() {
-            const response = await axios.get(backendurl);
-            const payload: Payload = response.data;
-            setText(payload)
-        }
+        const fetchUsers = async () => {
+            try {
+                console.log("Hehe")
+                const response = await axios.get('http://localhost:8000/api/users');
+                const data = await response.data;
+                console.log(data)
+                setUsers(data);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+            }
+        };
 
-        // react components will re-render every time set state functions (like setText) are called
-        // this prevents an infinite render loop but obv not good practice, just setting up quick
-        // prototype
-        if (!text.message) {
-            getText();
-        }
-    });
+        fetchUsers();
+    }, []);
 
-    return(
+    return (
         <div>
-            <p>{text.message}</p>
-        </div>
+            <h2>User List</h2>
+            {
+                users.length === 0 ? (<p>No users</p>)
+                    :
+                    (<ul>
+                        {users.map((user) => (
+                            <li key={user.id} >
+                                <strong>ID:</strong> {user.id}, <strong>Email:</strong> {user.email}
+                            </li>
+                        ))}
+                    </ul>)
+            }
+        </div >
     )
 };
 
