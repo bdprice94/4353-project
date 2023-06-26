@@ -1,6 +1,5 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy.engine import Engine
 from sqlalchemy_utils import database_exists, create_database
 
 database_url = 'postgresql://localhost/db'
