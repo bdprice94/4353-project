@@ -1,0 +1,38 @@
+body{
+    background-color: #c4ebf1;
+    
+}
+.user-profile-form {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    border: 15px solid #ffffc2;
+    align-items: center;
+    
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+  }
+  
+  .form-group label {
+    
+    font-weight: bold;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 5px;
+  }
+  
+  .user-profile-form button {
+    padding: 10px;
+    margin: 20px;
+    background-color:#99edc3
+  }
+  
