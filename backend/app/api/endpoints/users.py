@@ -1,39 +1,25 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
-from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+import app.schemas as schemas
+import app.models as models
 from app.api import deps
 
 router = APIRouter()
 
 
-@router.post("/create_user_table")
-async def create_user_table(db: Session = Depends(deps.get_session)):
-    query = "CREATE TABLE users (id int, name varchar(255))"
-    db.execute(text(query))
+@router.post("/", response_model=schemas.User)
+async def create_user(user: schemas.UserCreate, db: Session = Depends(deps.get_session)):
+    user = models.User(email=user.email, password=user.password)
+    db.add(user)
     db.commit()
 
-    return "Done"
+    return user
 
 
-@router.post("/create_user")
-async def create_user(username: str, db: Session = Depends(deps.get_session)):
-    query = text(f"INSERT INTO users (id, name) VALUES (0, '{username}')")
-    db.execute(query)
-    db.commit()
-
-    return "Done inserting"
-
-
-@router.get("/get_users")
+@router.get("/", response_model=List[schemas.User])
 async def get_users(db: Session = Depends(deps.get_session)):
-    query = text(f"SELECT * FROM users")
-    result = db.execute(query)
-    users = result.fetchall()
-    usernames = []
-    for (id, user) in users:
-        usernames.append(user)
-
-    db.commit()
-
-    return usernames
+    users = db.query(models.User).all()
+    return users
