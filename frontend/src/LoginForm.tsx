@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { backendurl, setCookie } from './utils';
 
-const backendurl = "http://localhost:8000"; // will need to read from env if we need to host this
+const backendurl_users = `${backendurl}/users`; // will need to read from env if we need to host this
  
 export interface UserLoginForm {
     username: { value: string },
@@ -14,8 +15,8 @@ export interface UserLogin {
 }
 
 export interface UserLoginResponse {
-    status: { value: boolean },
-    text: {value: string},
+    username: string,
+    id:       number,
 }
 
 const convertFormToModel = (form: UserLoginForm) => {
@@ -33,18 +34,16 @@ const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Sy
         password: {value: target.password.value},
     };
     const userLogin = convertFormToModel(userLoginForm);
-    axios.post(`${backendurl}/login`, userLogin)
+    axios.post(`${backendurl_users}/login`, userLogin)
         .then(response => {
+            console.log(response)
             const data = response.data as UserLoginResponse
-            if (!data.status) {
-                alert(data.text);
-            }
-            else {
-                alert('Successfully logged in!');
-            }
+            alert(`Successfully logged in ${data.username}!`);
+            setCookie('username', data.username);
+            setCookie('userid', data.id.toString())
         })
         .catch(e => {
-            if (e.response.status === 422) {
+            if ('response' in e && e.response.status === 422) {
                 const errString = e.response.data.detail
                     .map((err: any) => err.msg)
                     .join('\n');

@@ -1,29 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { backendurl } from './utils';
 
-const backendurl = "http://localhost:8000"; // will need to read from env if we need to host this
+const backendurl_users = `${backendurl}/users`
 
 export interface UserRegisterForm {
-    username: { value: string },
+    username:  { value: string },
     password:  { value: string },
-    password2:  { value: string },
+    password2: { value: string },
 }
 
 export interface UserRegister {
-    username: string,
-    password: string,
+    username:  string,
+    password:  string,
     password2: string,
-}
-
-export interface UserRegisterResponse {
-    status: { value: boolean },
-    text: {value: string},
 }
 
 const convertFormToModel = (form: UserRegisterForm) => {
     return {
-        username: form.username.value,
-        password: form.password.value,
+        username:  form.username.value,
+        password:  form.password.value,
         password2: form.password2.value,
     }
 }
@@ -32,23 +28,17 @@ const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Sy
     e.preventDefault();
     const target = e.target as typeof e.target & UserRegisterForm;
     const userRegisterForm = {
-        username: {value: target.username.value},
-        password: {value: target.password.value},
+        username:  {value: target.username.value},
+        password:  {value: target.password.value},
         password2: {value: target.password2.value},
     };
     const userRegister = convertFormToModel(userRegisterForm);
-    axios.post(`${backendurl}/create_user`, userRegister)
+    axios.post(`${backendurl_users}/create_user`, userRegister)
         .then(response => {
-            const data = response.data as UserRegisterResponse
-            if (!data.status) {
-                alert(data.text);
-            }
-            else {
-                alert('Successfully created a user!');
-            }
+            alert('Successfully created a user!');
         })
         .catch(e => {
-            if (e.response.status === 422) {
+            if ('response' in e && e.response.status === 422) {
                 const errString = e.response.data.detail
                     .map((err: any) => err.msg)
                     .join('\n');
