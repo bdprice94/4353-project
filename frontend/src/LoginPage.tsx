@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
-
-
-const backendurl = "http://localhost:8000/api/users"; // will need to read from env if we need to host this
 
 const LoginPage: React.FunctionComponent = () => {
     const [needsLogin, setNeedsLogin] = useState(false)
