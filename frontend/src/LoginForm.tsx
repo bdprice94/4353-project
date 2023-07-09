@@ -71,15 +71,9 @@ const loginFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Synth
 
 const LoginForm: React.FunctionComponent = () => {
     return (
-<<<<<<< HEAD
-        <form  className={styles.form} onSubmit={registerFormSubmit}>
+        <form  className={styles.form} onSubmit={loginFormSubmit}>
             <label className={styles.label}>
                 Username: <input type='text' id='username' className={styles.input}></input>
-=======
-        <form onSubmit={loginFormSubmit}>
-            <label>
-                Username: <input type='text' id='username'></input>
->>>>>>> 26567b93cdc7bd967a69937f7dbdcc7fc6e3df9e
             </label>
             <br/>
             <label className={styles.label}>
