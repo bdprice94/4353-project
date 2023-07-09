@@ -3,16 +3,14 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 
 
-// Define the props type for the Navbar component
-type NavbarProps = {
-  // You can add any props you want here
-};
 
-// Define the Navbar component using a function expression
-const Navbar: React.FC<NavbarProps> = (props) => {
-  // You can use any state or effect hooks here
+
+
+
+const Navbar: React.FunctionComponent = () => {
+  
   return (
-    // Use JSX syntax to render the navbar element
+   
     <nav className="navbar">
       <div className="navbar__logo">
         <Link to="/">
