@@ -1,39 +1,41 @@
-.form-container {
+.formcontainer {
     max-width: 400px;
     margin: 0 auto;
   }
   
-  .form-container h1 {
+  .formcontainer h1 {
     text-align: center;
+    color:#26474E ;
   }
   
-  .form-container form {
+  .formcontainer form {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 20px;
   }
   
-  .form-container label {
+  .formcontainer label {
     font-weight: bold;
     margin-bottom: 5px;
+    color: #26474E;
   }
   
-  .form-container input {
+  .formcontainer input {
     width: 100%;
     padding: 8px;
     margin-bottom: 10px;
   }
   
-  .form-container button {
+  .formcontainer button {
     padding: 8px 16px;
     background-color: blue;
-    color: #fff;
+    color: #B0E1FF;
     border: none;
     cursor: pointer;
   }
   
-  .form-container button:hover {
+  .formcontainer button:hover {
     background-color: blue;
   }
   

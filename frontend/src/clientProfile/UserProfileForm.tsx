@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import "./UserProfileForm.css";
 
+import styles from "./UserProfileForm.module.css";
+import Navbar from "../Navbar/Navbar";
 
 const states = [
     { code: "AL" },
@@ -70,7 +71,11 @@ const UserProfileForm: React.FC = () => {
   };
 
   return (
-    <form className="user-profile-form" onSubmit={handleSubmit}>
+    <>
+    <div className={styles.body}>
+    <Navbar />
+
+    <form className={styles.userprofileform} onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="fullName">Full Name:</label>
         <input
@@ -79,10 +84,9 @@ const UserProfileForm: React.FC = () => {
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           maxLength={50}
-          required
-        />
+          required />
       </div>
-      <div className="form-group">
+      <div className={styles.formgroup}>
         <label htmlFor="address1">Address 1:</label>
         <input
           id="address1"
@@ -90,20 +94,18 @@ const UserProfileForm: React.FC = () => {
           value={address1}
           onChange={(e) => setAddress1(e.target.value)}
           maxLength={100}
-          required
-        />
+          required />
       </div>
-      <div className="form-group">
+      <div className={styles.formgroup}>
         <label htmlFor="address2">Address 2:</label>
         <input
           id="address2"
           type="text"
           value={address2}
           onChange={(e) => setAddress2(e.target.value)}
-          maxLength={100}
-        />
+          maxLength={100} />
       </div>
-      <div className="form-group">
+      <div className={styles.formgroup}>
         <label htmlFor="city">City:</label>
         <input
           id="city"
@@ -111,10 +113,9 @@ const UserProfileForm: React.FC = () => {
           value={city}
           onChange={(e) => setCity(e.target.value)}
           maxLength={100}
-          required
-        />
+          required />
       </div>
-      <div className="form-group">
+      <div className={styles.formgroup}>
         <label htmlFor="state">State:</label>
         <select
           id="state"
@@ -130,7 +131,7 @@ const UserProfileForm: React.FC = () => {
           ))}
         </select>
       </div>
-      <div className="form-group">
+      <div className={styles.formgroup}>
         <label htmlFor="zipCode">Zipcode:</label>
         <input
           id="zipCode"
@@ -139,11 +140,12 @@ const UserProfileForm: React.FC = () => {
           onChange={(e) => setZipCode(e.target.value)}
           minLength={5}
           maxLength={9}
-          required
-        />
+          required />
       </div>
       <button type="submit">Submit</button>
     </form>
+    </div>
+    </>
   );
 };
 

@@ -3,6 +3,12 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import LoginPage from './LoginPage';
+import UserProfileForm from './clientProfile/UserProfileForm';
+import UserProfileDisplay from './clientProfile/UserProfileDisplay';
+import FuelQuoteForm from './clientfuelquote/components/FuelQuoteForm';
+import FuelQuoteHistory from './clientfuelquote/components/FuelQuoteHistory';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,6 +17,9 @@ root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
+ 
+ 
+  
 );
 
 // If you want to start measuring performance in your app, pass a function
