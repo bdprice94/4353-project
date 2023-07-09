@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import axios, {AxiosError} from 'axios';
 import { backendurl } from './utils';
 import LoginForm from './LoginForm';
 import styles from "./LoginForm.module.css";
@@ -37,19 +37,30 @@ const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Sy
     };
     const userRegister = convertFormToModel(userRegisterForm);
     axios.post(`${backendurl_users}/create_user`, userRegister)
-        .then(response => {
+        .then(() => {
             alert('Successfully created a user!');
         })
-        .catch(e => {
-            if ('response' in e && e.response.status === 422) {
-                const errString = e.response.data.detail
-                    .map((err: any) => err.msg)
-                    .join('\n');
-                alert(errString)
+        .catch((e: AxiosError) => {
+            let errString = "Sorry, we don't know what happened. Please verify information is correct"
+            if ('response' in e && e.response !== undefined) {
+                console.log(e.response.data)
+                const data = e.response.data as { detail: string | Array<string> }
+                if (Array.isArray(data.detail)) {
+                    errString = (data.detail as Array<string>)
+                        .map((err: any) => err.msg)
+                        .join('\n');
+                }
+                else if (e.response.status === 422 || e.response.status === 400) {
+                    errString = data.detail as string
+                }
+                else {
+                    console.log(data)
+                }
             }
             else {
                 console.log(e)
             }
+            alert(errString)
         });
 }
 
