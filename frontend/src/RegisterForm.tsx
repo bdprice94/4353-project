@@ -1,6 +1,9 @@
 import React from 'react';
 import axios, {AxiosError} from 'axios';
 import { backendurl } from './utils';
+import LoginForm from './LoginForm';
+import styles from "./LoginForm.module.css";
+
 
 const backendurl_users = `${backendurl}/users`
 
@@ -63,7 +66,7 @@ const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Sy
 
 const RegisterForm: React.FunctionComponent = () => {
     return (
-        <form onSubmit={registerFormSubmit}>
+        <form className = {styles.form}onSubmit={registerFormSubmit}>
             <label>
                 Username: <input type='text' id='username'></input>
             </label>

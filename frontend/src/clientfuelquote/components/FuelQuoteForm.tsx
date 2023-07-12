@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './fqform.css';
+import styles from './fqform.module.css';
+import Navbar from "../../Navbar/Navbar";
 
 const CalendarInput: React.FC<{ value: Date | null, onChange: (date: Date | null) => void }> = ({ value, onChange }) => {
   return (
@@ -29,7 +30,9 @@ const FuelQuoteForm: React.FC = () => {
   };
 
   return (
-    <div className="form-container">
+    <>
+    <Navbar/>
+    <div className= {styles.formcontainer}>
       <h1>Fuel Quote Form</h1>
       <form onSubmit={handleSubmit}>
         <div>
@@ -78,6 +81,7 @@ const FuelQuoteForm: React.FC = () => {
         <button type="submit">Submit</button>
       </form>
     </div>
+    </>
   );
 };
 
