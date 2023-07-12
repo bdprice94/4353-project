@@ -1,6 +1,9 @@
 import React from 'react';
 import axios, {AxiosError} from 'axios';
 import { backendurl, setCookie } from './utils';
+import styles from "./LoginForm.module.css";
+
+
 
 const backendurl_users = `${backendurl}/users`; // will need to read from env if we need to host this
  
@@ -68,16 +71,16 @@ const loginFormSubmit: React.FormEventHandler<HTMLFormElement> = (e: React.Synth
 
 const LoginForm: React.FunctionComponent = () => {
     return (
-        <form onSubmit={loginFormSubmit}>
-            <label>
-                Username: <input type='text' id='username'></input>
+        <form  className={styles.form} onSubmit={loginFormSubmit}>
+            <label className={styles.label}>
+                Username: <input type='text' id='username' className={styles.input}></input>
             </label>
             <br/>
-            <label>
-                Password: <input type='password' id='password'></input>
+            <label className={styles.label}>
+                Password: <input type='password' id='password' className={styles.input}></input>
             </label>
             <br/>
-            <input type='submit' id ='submit'></input>
+            <input type='submit' id ='submit' ></input>
         </form>
     )
 }
