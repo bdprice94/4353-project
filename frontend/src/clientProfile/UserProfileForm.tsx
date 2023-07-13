@@ -3,7 +3,7 @@ import styles from "./UserProfileForm.module.css";
 import Navbar from "../Navbar/Navbar";
 import axios, {AxiosError} from 'axios';
 import {getCookie,backendurl} from "../utils"
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const states = [
     { code: "AL" },
@@ -59,21 +59,20 @@ const states = [
   
 ];
 
-const backendurl_users = `${backendurl}/users`;
-
 
 export interface ProfileForm{
   full_name: { value: string },
   address_1: { value: string },
-  address_2: { value: string },
+  address_2?: { value: string },
   city: { value: string },
   state: { value: string },
   zipcode: { value: number },
 }
 export interface UserProfile {
+  username: string,
   full_name: string,
   address_1: string,
-  address_2: string,
+  address_2?: string,
   city: string,
   state: string,
   zipcode: number
@@ -81,6 +80,7 @@ export interface UserProfile {
 
 const convertFormToModel = (form: UserProfile) => {
   return {
+    username: form.username, 
     full_name: form.full_name,
     address_1: form.address_1,
     address_2: form.address_2,
@@ -99,6 +99,7 @@ const UserProfileForm: React.FC = () => {
   const [city, setCity] = useState( "");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const backendurl_profile = `${backendurl}/profile`;
@@ -108,20 +109,23 @@ const UserProfileForm: React.FC = () => {
   const target = e.target as typeof e.target & ProfileForm;
   
   const profile = {
-    full_name: target.full_name?.value,
-    address_1: target.address_1?.value,
+    username: getCookie("username") as string,
+    full_name: target.full_name.value,
+    address_1: target.address_1.value,
     address_2: target.address_2?.value,
-    city: target.city?.value,
-    state: target.state?.value,
-    zipcode: target.zipcode?.value
+    city: target.city.value,
+    state: target.state.value,
+    zipcode: target.zipcode.value
   };
-  console.log(profile);
+  
+  
   const userprofile = convertFormToModel(profile);
   const username = getCookie("username"); 
   console.log(username);
-  axios.post(`${backendurl_users}/user_profile/${username}`, userprofile, )
+  axios.post(`${backendurl_profile}/user_profile/${username}`, userprofile, )
     .then(response => {
-     alert(`LETS FREAKNG GO!!! ${username} your profile has just been created!`);
+     alert(`${username} your profile has just been created!`);
+     navigate("/user-profile-display");
     })
     .catch((e: AxiosError) => {
       

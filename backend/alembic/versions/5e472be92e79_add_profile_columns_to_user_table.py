@@ -23,7 +23,7 @@ def upgrade() -> None:
     op.add_column('users', sa.Column('address_2', sa.String(100)))
     op.add_column('users', sa.Column('city', sa.String(100)))
     op.add_column('users', sa.Column('state', sa.String(2)))
-    op.add_column('users', sa.Column('zipcode', sa.Integer(9)))
+    op.add_column('users', sa.Column('zipcode', sa.Integer))
 
     pass
 

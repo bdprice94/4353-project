@@ -3,7 +3,10 @@ from typing import Optional
 
 class UserBase(BaseModel):
     username: str
-   
+    
+
+    
+    
     @validator('username')
     def username_must_not_be_empty(cls, v):
         if len(v) < 1:
@@ -33,16 +36,22 @@ class UserCreate(UserBase):
             raise ValueError('Password must not be empty')
         return v.title()
     
-class UserProfile(UserBase):
-    full_name:str
-    address_1: str
-    address_2:Optional[str] 
-    city: str
-    state: str
-    zipcode: int
+
+  
+
+    
 class User(UserBase):
     id: int
-    UserProfile: Optional[UserProfile]
+    
     
     class Config:
         orm_mode = True
+
+class UserProfile(User):
+    id: Optional[int] = None # if youre wondering why I did this its because since UserProfile inherits from User, I made it optional in userprofile so when a form is submitted the id will not be changed and id will not prevent the form from submitting, btw it was the only way i could get both form and display to work so if you have any suggestions let me know slay
+    full_name:str
+    address_1: str
+    address_2:Optional[str] |  'None'
+    city: str
+    state: str
+    zipcode: int
