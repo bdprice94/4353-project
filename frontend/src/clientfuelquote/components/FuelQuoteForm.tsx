@@ -6,13 +6,16 @@ import Navbar from "../../Navbar/Navbar";
 import { getCookie, backendurl } from "../../utils";
 import axios, { AxiosError } from 'axios';
 
-const CalendarInput: React.FC<{ value: Date | null, onChange: (date: Date | null) => void }> = ({ value, onChange }) => {
+const CalendarInput: React.FC<{ value: Date , onChange: (date: Date) => void }> = ({ value, onChange }) => {
   return (
     <DatePicker
       selected={value}
       onChange={onChange}
-      dateFormat="MM/dd/yyyy"
+      dateFormat="yyyy-mm-dd"
       placeholderText="Select a date"
+      
+      
+      
     />
   );
 };
@@ -21,26 +24,25 @@ const username = getCookie("username");
 export interface FuelQuoteForm {
   gallons_requested: { value: number},
   delivery_address: { value: string },
-  delivery_date: { value: Date },
+  delivery_date: { value: string},
   suggested_price: { value: number },
   total_amount_due: { value: number }
 }
 
 
 export interface FuelQuote {
-  username: string,
-  gallons_requested: number,
-  delivery_address?: string,
-  delivery_date: Date,
-  suggested_price: number,
-  total_amount_due: number
+  gallons_requested: { value: number},
+  delivery_address: { value: string },
+  delivery_date: { value: Date}, 
+  suggested_price: { value: number },
+  total_amount_due: { value: number }
 }
 const convertFormToModel = (form: FuelQuoteForm) => {
   return {
     username: getCookie("username") as string,
     gallons_requested: form.gallons_requested.value,
     delivery_address: form.delivery_address.value,
-    delivery_date: form.delivery_date.value,
+    delivery_date:  form.delivery_date.value,
     suggested_price: form.suggested_price.value,
     total_amount_due: form.total_amount_due.value
   }
@@ -52,7 +54,7 @@ const FuelQuoteForm: React.FC = () => {
   const [address, setAddress] = useState("");
   const [price, setPrice] = useState("5");
   const [totalAmount, setTotalAmount] = useState("");
-  const [deliveryDate, setDeliveryDate] = useState<Date | null>(null);
+  const [deliveryDate, setDeliveryDate] = useState<Date>(new Date()); 
 
   const fetchUserAddress = async () => {
     const username = getCookie("username");
@@ -85,13 +87,13 @@ const FuelQuoteForm: React.FC = () => {
     e.preventDefault();
     const target = e.target as typeof e.target & FuelQuoteForm;
     const fuelquote = {
-      
-      gallons_requested: { value: Number(quanity)  },
+  gallons_requested: { value: Number(quanity)  },
   delivery_address: { value: address },
-  delivery_date: { value: deliveryDate as Date },
+  delivery_date: { value: deliveryDate.toDateString()},
   suggested_price: { value: Number(price) },
   total_amount_due: { value: Number(totalAmount) }
     };
+    console.log(fuelquote);
     const fuelquoteModel = convertFormToModel(fuelquote);
     axios.post(`${backendurl}/fuelquote/fuelquote/${username}`, fuelquoteModel)
       .then(response => {
@@ -138,7 +140,7 @@ const FuelQuoteForm: React.FC = () => {
           </div>
           <div>
             <label htmlFor="deliveryDate">Delivery Date:</label>
-            <CalendarInput value={deliveryDate} onChange={setDeliveryDate} />
+            <input type="date" min="2020-01-01" max="2023-12-31"></input>
           </div>
           <div>
             <label htmlFor="address">Delivery Address:</label>
