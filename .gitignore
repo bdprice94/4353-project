@@ -1,6 +1,7 @@
 # Database
 logfile
 db_data
+db_logs
 
 # Frontend
 node_modules
