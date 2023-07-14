@@ -23,3 +23,7 @@ Frontend:
     `cd frontend`
     `npm install`
     `npm start`
+
+Tests:
+    `cd backend`
+    `pytest`
