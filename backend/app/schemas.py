@@ -2,11 +2,7 @@ from pydantic import BaseModel, validator
 from typing import Optional
 
 class UserBase(BaseModel):
-    username: str
-    
-
-    
-    
+    username: str 
     @validator('username')
     def username_must_not_be_empty(cls, v):
         if len(v) < 1:
@@ -36,7 +32,13 @@ class UserCreate(UserBase):
             raise ValueError('Password must not be empty')
         return v.title()
     
-
+class FuelQuote(UserBase):
+    id: int
+    gallons_requested = int
+    delivery_address = int
+    delivery_date = int
+    suggested_price = int
+    total_amount_due = int
   
 
     
