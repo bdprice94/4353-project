@@ -27,3 +27,8 @@ Frontend:
 Tests:
     `cd backend`
     `pytest`
+
+Test Code Coverage:
+    `cd backend`
+    `coverage run -m pytest`
+    `coverage report`
