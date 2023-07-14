@@ -1,5 +1,7 @@
 import React from "react";
-import "./fqhist.css"
+import styles from "./fqhist.module.css"
+import Navbar from "../../Navbar/Navbar";
+
 interface TableRow {
   gallonsRequested: number;
   deliveryAddress: string;
@@ -15,7 +17,9 @@ const Table: React.FC = () => {
   ];
 
   return (
-    <div className="table-container">
+    <>
+    <Navbar/>
+    <div className={styles.tablecontainer}>
     <h1>Fuel Quote History</h1>
     <table>
       <thead>
@@ -40,6 +44,7 @@ const Table: React.FC = () => {
       </tbody>
     </table>
     </div>
+    </>
   );
 };
 

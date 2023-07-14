@@ -1,18 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "./UserProfileDisplay.css";
 
-
+import styles from "./UserProfileDisplay.module.css";
+import Navbar from "../Navbar/Navbar";
 
 const UserProfileDisplay:React.FC = () =>  {
     const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate("/edit");
+    navigate("/user-profile-form");
   };
 
   return (
-    <div className="user-profile-display">
+    <>
+    <Navbar/>
+    <div className={styles.userprofiledisplay}>
       <h2>User Profile</h2>
       <p>Full Name: </p>
       <p>Address 1: </p>
@@ -22,6 +24,7 @@ const UserProfileDisplay:React.FC = () =>  {
       <p>Zipcode: </p>
       <button onClick={handleEdit}>Edit</button>
     </div>
+    </>
   );
 };
 
