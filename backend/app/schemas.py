@@ -33,7 +33,7 @@ class UserCreate(UserBase):
         return v.title()
     
 class FuelQuote(UserBase):
-    id: int
+    
     gallons_requested = int
     delivery_address = int
     delivery_date = int
@@ -57,3 +57,4 @@ class UserProfile(User):
     city: str
     state: str
     zipcode: int
+    
