@@ -141,6 +141,10 @@ const UserProfileForm: React.FC = () => {
           const data = e.response.data as { detail: string };
           errString = data.detail;
         }
+        else if (e.response.status === 400) {
+          const data = e.response.data as { detail: string };
+          errString = data.detail;
+        }
         else {
           console.log(e.response.data);
         }
