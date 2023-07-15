@@ -14,7 +14,7 @@ interface TableRow {
 const Table: React.FC = () => {
   const [fuelquotes, setFuelquotes] = React.useState<TableRow[]>([]);
   React.useEffect(() => {
-    const username = getCookie('username'); 
+    const username = getCookie('username');
     axios.get(`${backendurl}/fuelquote/getfuelquote/${username}`).then((response) => {
       setFuelquotes(response.data);
       console.log(response.data);
@@ -23,32 +23,32 @@ const Table: React.FC = () => {
 
   return (
     <>
-    <Navbar/>
-    <div className={styles.tablecontainer}>
-    <h1>Fuel Quote History</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>Gallons Requested</th>
-          <th>Address</th>
-          <th>date</th>
-          <th>price</th>
-          <th>amount due</th>
-        </tr>
-      </thead>
-      <tbody>
-  {fuelquotes.map((row) => (
-    <tr key={row.deliveryDate.toDateString()}>
-      <td>{row.gallonsRequested}</td>
-      <td>{row.deliveryAddress}</td>
-      <td>{row.deliveryDate.toDateString()}</td>
-      <td>{row.Suggestedprice}</td>
-      <td>{row.AmountDue}</td>
-    </tr>
-  ))}
-</tbody>
-    </table>
-    </div>
+      <Navbar />
+      <div className={styles.tablecontainer}>
+        <h1>Fuel Quote History</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Gallons Requested</th>
+              <th>Address</th>
+              <th>date</th>
+              <th>price</th>
+              <th>amount due</th>
+            </tr>
+          </thead>
+          <tbody>
+            {fuelquotes.map((row) => (
+              <tr key={row.delivery_date.toString()}>
+                <td>{row.gallons_requested}</td>
+                <td>{row.delivery_address}</td>
+                <td>{row.delivery_date.toString()}</td>
+                <td>{row.suggested_price}</td>
+                <td>{row.total_amount_due}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };
