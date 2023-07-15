@@ -16,6 +16,9 @@ async def update_profile(username:str,profile: schemas.UserProfile, db: Session 
   user = db.query(models.User).filter(models.User.username == username).first()
   if not user:
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+  if(len(str(profile.zipcode)) > 9 or len(str(profile.zipcode)) < 5):
+      raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="please enter a valid zipcode")
   user.username = username
   user.full_name = profile.full_name
   user.address_1 = profile.address_1
