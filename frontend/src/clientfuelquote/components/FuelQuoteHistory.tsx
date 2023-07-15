@@ -5,18 +5,19 @@ import { getCookie, backendurl } from "../../utils";
 import axios, { AxiosError } from 'axios';
 
 interface TableRow {
-  gallonsRequested: number;
-  deliveryAddress: string;
-  deliveryDate: Date;
-  Suggestedprice: number;
-  AmountDue: number;
+  gallons_requested: number;
+  delivery_address: string;
+  delivery_date: string;
+  suggested_price: number;
+  total_amount_due: number;
 }
 const Table: React.FC = () => {
   const [fuelquotes, setFuelquotes] = React.useState<TableRow[]>([]);
   React.useEffect(() => {
-    const username = "someuser"; // change this to the actual username
-    axios.get(`backendurl/fuelquote/fuelquote/${username}`).then((response) => {
+    const username = getCookie('username'); 
+    axios.get(`${backendurl}/fuelquote/getfuelquote/${username}`).then((response) => {
       setFuelquotes(response.data);
+      console.log(response.data);
     });
   }, []);
 
