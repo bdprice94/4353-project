@@ -17,13 +17,9 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.create_table(
-        'users',
-        # Autoincrement is here by default, primary_key is what gives it, i've added it to be explicit
-        sa.Column('id', sa.INTEGER, primary_key=True, autoincrement=True),
-        sa.Column('username', sa.String(255), nullable=False),
-        sa.Column('password', sa.String(255), nullable=False)
-    )
+    op.alter_column('users', 'email', nullable=False,
+                    new_column_name='username')
+
     pass
 
 

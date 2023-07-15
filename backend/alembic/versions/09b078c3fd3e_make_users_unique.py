@@ -17,14 +17,8 @@ depends_on = None
 
 
 def upgrade() -> None:
-    op.drop_table('users')  # This lets us upgrade without messing with the database directly or over API
-    op.create_table(
-        'users',
-        # Autoincrement is here by default, primary_key is what gives it, i've added it to be explicit
-        sa.Column('id', sa.INTEGER, primary_key=True, autoincrement=True),
-        sa.Column('username', sa.String(255), unique=True, nullable=False),
-        sa.Column('password', sa.String(255), nullable=False)
-    )
+    op.create_unique_constraint('unique_username', 'users', ['username'])
+
     pass
 
 

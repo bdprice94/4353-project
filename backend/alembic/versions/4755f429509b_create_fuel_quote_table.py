@@ -19,13 +19,16 @@ depends_on = None
 def upgrade() -> None:
     op.create_table(
         "fuelquote",
-        sa.Column('username', sa.String(255), nullable=False),
+        sa.Column('username', sa.String(255), nullable=False,),
         sa.Column("gallons_requested", sa.Numeric, nullable=False),
         sa.Column("delivery_address", sa.String, nullable=False),
         sa.Column("delivery_date", sa.Date, nullable=False),
         sa.Column("suggested_price", sa.Numeric, nullable=False),
         sa.Column("total_amount_due", sa.Numeric, nullable=False),
     )
+
+    op.create_foreign_key('fuelquote_username_fk', 'fuelquote', 'users', [
+                          'username'], ['username'])
     pass
 
 

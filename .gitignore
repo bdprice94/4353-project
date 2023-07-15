@@ -1,6 +1,7 @@
 # Database
 logfile
 db_data
+db_logs
 
 # Frontend
 node_modules
@@ -22,3 +23,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 project_structure.txt
+
+# Backend
+.pytest_cache
+.coverage
