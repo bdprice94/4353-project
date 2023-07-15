@@ -1,5 +1,6 @@
 from pydantic import BaseModel, validator
 from typing import Optional
+from datetime import date,datetime
 
 class UserBase(BaseModel):
     username: str 
@@ -32,14 +33,16 @@ class UserCreate(UserBase):
             raise ValueError('Password must not be empty')
         return v.title()
     
-class FuelQuote(UserBase):
-    
-    gallons_requested = int
-    delivery_address = int
-    delivery_date = int
-    suggested_price = int
-    total_amount_due = int
-  
+class FuelQuote(BaseModel):
+    id = int 
+    username: str
+    gallons_requested: int
+    delivery_address: str
+    delivery_date: str
+    suggested_price: int
+    total_amount_due: int
+    class Config:
+        orm_mode = True
 
     
 class User(UserBase):
