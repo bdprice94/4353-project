@@ -38,12 +38,12 @@ const Table: React.FC = () => {
       </thead>
       <tbody>
   {fuelquotes.map((row) => (
-    <tr key={row.delivery_date}>
-      <td>{row.gallons_requested}</td>
-      <td>{row.delivery_address}</td>
-      <td>{row.delivery_date}</td>
-      <td>{row.suggested_price}</td>
-      <td>{row.total_amount_due}</td>
+    <tr key={row.deliveryDate.toDateString()}>
+      <td>{row.gallonsRequested}</td>
+      <td>{row.deliveryAddress}</td>
+      <td>{row.deliveryDate.toDateString()}</td>
+      <td>{row.Suggestedprice}</td>
+      <td>{row.AmountDue}</td>
     </tr>
   ))}
 </tbody>
