@@ -26,3 +26,4 @@ project_structure.txt
 
 # Backend
 .pytest_cache
+.coverage
