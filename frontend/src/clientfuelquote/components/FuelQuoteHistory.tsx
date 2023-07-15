@@ -1,20 +1,25 @@
 import React from "react";
 import styles from "./fqhist.module.css"
 import Navbar from "../../Navbar/Navbar";
+import { getCookie, backendurl } from "../../utils";
+import axios, { AxiosError } from 'axios';
 
 interface TableRow {
-  gallonsRequested: number;
-  deliveryAddress: string;
-  deliveryDate: Date;
-  Suggestedprice: number;
-  AmountDue: number;
+  gallons_requested: number;
+  delivery_address: string;
+  delivery_date: string;
+  suggested_price: number;
+  total_amount_due: number;
 }
-
 const Table: React.FC = () => {
-  const tableData: TableRow[] = [
-    { gallonsRequested: 1, deliveryAddress: "4361 cougar village dr", deliveryDate: new Date('2020-01-01'), Suggestedprice:2 ,AmountDue: 3}
-    
-  ];
+  const [fuelquotes, setFuelquotes] = React.useState<TableRow[]>([]);
+  React.useEffect(() => {
+    const username = getCookie('username'); 
+    axios.get(`${backendurl}/fuelquote/getfuelquote/${username}`).then((response) => {
+      setFuelquotes(response.data);
+      console.log(response.data);
+    });
+  }, []);
 
   return (
     <>
@@ -32,16 +37,16 @@ const Table: React.FC = () => {
         </tr>
       </thead>
       <tbody>
-        {tableData.map((row) => (
-          <tr key={row.deliveryDate.toDateString()}>
-            <td>{row.gallonsRequested}</td>
-            <td>{row.deliveryAddress}</td>
-            <td>{row.deliveryDate.toDateString()}</td>
-            <td>{row.Suggestedprice}</td>
-            <td>{row.AmountDue}</td>
-          </tr>
-        ))}
-      </tbody>
+  {fuelquotes.map((row) => (
+    <tr key={row.delivery_date}>
+      <td>{row.gallons_requested}</td>
+      <td>{row.delivery_address}</td>
+      <td>{row.delivery_date}</td>
+      <td>{row.suggested_price}</td>
+      <td>{row.total_amount_due}</td>
+    </tr>
+  ))}
+</tbody>
     </table>
     </div>
     </>
