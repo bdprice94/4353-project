@@ -4,13 +4,11 @@ from app.database import Base
 
 
 class UserCredentials(Base):
-    __tablename__ = "users"
+    __tablename__ = "usercredentials"
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     password = Column(String)
-
-    fuel_quotes = relationship("FuelQuote", back_populates="user")
 
 
 class ClientInformation(Base):
@@ -35,5 +33,3 @@ class FuelQuote(Base):
     delivery_date = Column(String)
     suggested_price = Column(Integer)
     total_amount_due = Column(Integer)
-
-    user = relationship("User", back_populates="fuel_quotes")
