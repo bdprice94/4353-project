@@ -22,13 +22,13 @@ def contains_special_char(password):
 @router.post("/create_user", status_code=status.HTTP_201_CREATED)
 async def create_user(user: schemas.UserCreate, db: Session = Depends(deps.get_session)):
     if len(user.password) < 8 \
-            or user.password != user.password2\
+            or user.password != user.password2 \
             or not contains_special_char(user.password):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="Please ensure that the password is at least 8 characters, "
                             + "that the passwords match, and that the password contains a special "
                             + "character")
-    user = models.User(username=user.username, password=user.password)
+    user = models.UserCredentials(username=user.username, password=user.password)
     try:
         db.add(user)
         db.commit()
@@ -42,13 +42,13 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(deps.get_s
 
 @router.get("/", response_model=List[schemas.User])
 async def get_users(db: Session = Depends(deps.get_session)):
-    users = db.query(models.User).all()
+    users = db.query(models.UserCredentials).all()
     return users
 
 
 @router.post("/login", response_model=schemas.User)
 async def login(user: schemas.UserLogin, db: Session = Depends(deps.get_session)):
-    user_m = models.User
+    user_m = models.UserCredentials
     try:
         user_data = db.query(user_m)\
             .where(user_m.username == user.username).first()
