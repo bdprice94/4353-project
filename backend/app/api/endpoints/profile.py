@@ -43,6 +43,8 @@ async def update_profile(username: str, profile: schemas.UserProfile, db: Sessio
 @router.get("/profile/{username}", response_model=schemas.UserProfile)
 async def get_profile_details_by_username(username: str, db: Session = Depends(deps.get_session)):
     userid = db.query(models.UserCredentials.id).filter(models.UserCredentials.username == username).scalar()
+    if not userid:
+        raise HTTPException(status_code=404, detail="User not found")
     clientInfo = db.query(models.ClientInformation).filter(models.ClientInformation.userid == userid).first()
     if not clientInfo:
         raise HTTPException(status_code=404, detail="User not found")

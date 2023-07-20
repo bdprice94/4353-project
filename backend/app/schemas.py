@@ -35,7 +35,6 @@ class UserCreate(UserBase):
 
 
 class FuelQuote(BaseModel):
-    id: int
     username: str
     gallons_requested: int
     delivery_address: str

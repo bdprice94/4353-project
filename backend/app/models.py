@@ -27,7 +27,7 @@ class FuelQuote(Base):
     __tablename__ = "fuelquote"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    username = Column(String, ForeignKey("users.username"))
+    username = Column(String, ForeignKey(UserCredentials.username))
     gallons_requested = Column(Integer)
     delivery_address = Column(String)
     delivery_date = Column(String)
