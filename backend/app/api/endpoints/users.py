@@ -8,6 +8,8 @@ import app.schemas as schemas
 import app.models as models
 from app.api import deps
 
+import bcrypt
+
 router = APIRouter()
 
 
@@ -28,7 +30,8 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(deps.get_s
                             detail="Please ensure that the password is at least 8 characters, "
                             + "that the passwords match, and that the password contains a special "
                             + "character")
-    user = models.UserCredentials(username=user.username, password=user.password)
+    hash_pass = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
+    user = models.UserCredentials(username=user.username, password=hash_pass)
     try:
         db.add(user)
         db.commit()
@@ -52,7 +55,7 @@ async def login(user: schemas.UserLogin, db: Session = Depends(deps.get_session)
     try:
         user_data = db.query(user_m)\
             .where(user_m.username == user.username).first()
-        if not user_data or user_data.password != user.password:
+        if not user_data or not bcrypt.checkpw(user.password.encode('utf-8'), user_data.password):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail="Incorrect username or password")
     except exc.FlushError as e:

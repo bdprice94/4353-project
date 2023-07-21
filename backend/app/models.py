@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String,Date,ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, LargeBinary
 from sqlalchemy.orm import relationship
 from app.database import Base
 
@@ -8,7 +8,7 @@ class UserCredentials(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
-    password = Column(String)
+    password = Column(LargeBinary)
 
 
 class ClientInformation(Base):
