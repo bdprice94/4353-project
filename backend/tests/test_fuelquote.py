@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 import app.models as models
 import app.schemas as schemas
+import bcrypt
 
 
 def test_submit_fuelquote_form(client: TestClient, db_session: Session):
@@ -10,7 +11,7 @@ def test_submit_fuelquote_form(client: TestClient, db_session: Session):
      queen = models.UserCredentials(
         id=0,
         username="cairo",
-        password="Super Secret Please Encode This",
+        password=bcrypt.hashpw("Super Secret Please Encode This".encode('utf-8'), bcrypt.gensalt())
         )
      db_session.add(queen)
      db_session.commit()
@@ -46,7 +47,7 @@ def test_submit_fuelquote_form(client: TestClient, db_session: Session):
      rat = models.UserCredentials(
         id=1,
         username="rat",
-        password="Super Secret Please Encode This",
+        password=bcrypt.hashpw("Super Secret Please Encode This".encode('utf-8'), bcrypt.gensalt())
         )
      db_session.add(rat)
      db_session.commit()
@@ -89,7 +90,7 @@ def test_get_fuelquotes_by_user(client: TestClient, db_session: Session):
      queen = models.UserCredentials(
         id=0,
         username="Cairo",
-        password="Super Secret Please Encode This",
+        password=bcrypt.hashpw("Super Secret Please Encode This".encode('utf-8'), bcrypt.gensalt())
         )
      db_session.add(queen)
      db_session.commit()

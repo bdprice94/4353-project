@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 import app.models as models
 import app.schemas as schemas
+import bcrypt
 
 
 def test_get_users(client: TestClient, db_session: Session):
@@ -14,7 +15,7 @@ def test_get_users(client: TestClient, db_session: Session):
     professor = models.UserCredentials(
         id=0,
         username="Professor Singh",
-        password="Super Secret Please Encode This",
+        password="Super Secret Please Encode This".encode('utf-8'),
     )
     db_session.add(professor)
     db_session.commit()
@@ -45,7 +46,7 @@ def test_login(client: TestClient, db_session: Session):
     professor = models.UserCredentials(
         id=0,
         username="Professor Singh",
-        password="Super Secret Please Encode This",
+        password=bcrypt.hashpw("Super Secret Please Encode This".encode('utf-8'), bcrypt.gensalt())
     )
     db_session.add(professor)
     db_session.commit()
