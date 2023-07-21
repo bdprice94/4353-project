@@ -10,7 +10,7 @@ class UserBase(BaseModel):
     def username_must_not_be_empty(cls, v):
         if len(v) < 1:
             raise ValueError('Username must not be empty')
-        return v.title()
+        return v
 
 
 class UserLogin(UserBase):
@@ -20,7 +20,7 @@ class UserLogin(UserBase):
     def password_must_not_be_empty(cls, v):
         if len(v) < 1:
             raise ValueError('Password must not be empty')
-        return v.title()
+        return v
 
 
 class UserCreate(UserBase):
@@ -31,7 +31,7 @@ class UserCreate(UserBase):
     def password_must_not_be_empty(cls, v):
         if len(v) < 1:
             raise ValueError('Password must not be empty')
-        return v.title()
+        return v
 
 
 class FuelQuote(BaseModel):
