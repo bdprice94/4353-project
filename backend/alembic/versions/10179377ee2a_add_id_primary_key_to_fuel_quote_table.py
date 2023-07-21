@@ -24,7 +24,6 @@ def upgrade() -> None:
     op.execute("CREATE SEQUENCE fuelquote_id_seq START WITH 1")
     op.execute("ALTER TABLE fuelquote ALTER COLUMN id SET DEFAULT nextval('fuelquote_id_seq')")
     op.create_primary_key("pk_fuelquote", "fuelquote", ["id"])
-    pass
 
 
 def downgrade() -> None:
