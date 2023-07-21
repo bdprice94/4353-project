@@ -4,11 +4,13 @@ from sqlalchemy.orm import Session
 import app.models as models
 import app.schemas as schemas
 
+import bcrypt
+
 def test_update_profile(client: TestClient, db_session: Session):
     professor = models.UserCredentials(
         id=0,
         username="Professorsingh",
-        password="Super Secret Please Encode This",
+        password=bcrypt.hashpw("Super Secret Please Encode This".encode('utf-8'), bcrypt.gensalt())
     )
     db_session.add(professor)
     db_session.commit()
@@ -40,7 +42,7 @@ def test_get_profile_details_by_username(client: TestClient, db_session: Session
      professor = models.UserCredentials(
         id=1,
         username="Ella",
-        password="blah",
+        password=bcrypt.hashpw("blah".encode('utf-8'), bcrypt.gensalt())
      )
      db_session.add(professor)
      db_session.commit()
