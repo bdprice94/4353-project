@@ -13,10 +13,10 @@ router = APIRouter()
 @router.post("/fuelquote/{username}", response_model=schemas.FuelQuote)
 async def submit_fuelquote_form(username: str, fuelquote: schemas.FuelQuote, db: Session = Depends(deps.get_session)):
     userid = db.query(models.UserCredentials.id).filter(models.UserCredentials.username == username).scalar()
-    if not userid:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    if userid is None:
+       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     clientInfo = db.query(models.ClientInformation).filter(models.ClientInformation.userid == userid).first()
-    if not clientInfo:
+    if clientInfo is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
     fuelquote = models.FuelQuote(
