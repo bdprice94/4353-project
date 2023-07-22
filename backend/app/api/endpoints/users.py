@@ -63,7 +63,8 @@ async def get_users(db: Session = Depends(deps.get_session)):
 async def login(user: schemas.UserLogin, db: Session = Depends(deps.get_session)):
     user_m = models.UserCredentials
     try:
-        user_data = db.query(user_m).where(user_m.username == user.username).first()
+        user_data = db.query(user_m).where(
+            user_m.username == user.username).first()
         if not user_data or not bcrypt.checkpw(
             user.password.encode("utf-8"), user_data.password.encode("utf-8")
         ):

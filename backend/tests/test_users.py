@@ -2,7 +2,6 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 import app.models as models
-import app.schemas as schemas
 import bcrypt
 
 
@@ -30,7 +29,8 @@ def test_get_users(client: TestClient, db_session: Session):
 def test_add_user(client: TestClient, db_session: Session):
     response = client.post(
         "/api/users/create_user",
-        json={"username": "Cat", "password": "Cat12356!", "password2": "Cat12356!"},
+        json={"username": "Cat", "password": "Cat12356!",
+              "password2": "Cat12356!"},
     )
 
     assert response.status_code == 201
@@ -48,9 +48,9 @@ def test_login(client: TestClient, db_session: Session):
     professor = models.UserCredentials(
         id=0,
         username="Professor Singh",
-        password=bcrypt.hashpw(
+        password=str(bcrypt.hashpw(
             "Super Secret Please Encode This".encode("utf-8"), bcrypt.gensalt()
-        ),
+        ), 'utf-8'),
     )
     db_session.add(professor)
     db_session.commit()
