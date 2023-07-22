@@ -1,5 +1,9 @@
 export const backendurl = "http://localhost:8000/api"; // will need to read from env if we need to host this
 
+export function deleteCookie(name: string) {
+    document.cookie = `${name}=;expires=` + new Date(0).toUTCString()
+}
+
 export function setCookie(name: string, val: string) {
     const date = new Date();
 
