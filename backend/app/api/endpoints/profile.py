@@ -13,7 +13,8 @@ router = APIRouter()
 @router.post("/user_profile/{username}", response_model=schemas.UserProfile)
 async def update_profile(
     profile: schemas.UserProfile,
-    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
+    user_credentials: models.UserCredentials = Depends(
+        deps.get_user_credentials),
     db: Session = Depends(deps.get_session),
 ):
     if len(str(profile.zipcode)) > 9 or len(str(profile.zipcode)) < 5:
@@ -22,7 +23,7 @@ async def update_profile(
             detail="please enter a valid zipcode",
         )
 
-    clientInfo = models.ClientInformation(
+    client_information = models.ClientInformation(
         userid=user_credentials.id,
         full_name=profile.full_name,
         address_1=profile.address_1,
@@ -31,30 +32,35 @@ async def update_profile(
         state=profile.state,
         zipcode=profile.zipcode,
     )
-    db.add(clientInfo)
+    db.add(client_information)
     db.commit()
-    return {
-        "username": user_credentials.username,
-        "full_name": clientInfo.full_name,
-        "address_1": clientInfo.address_1,
-        "address_2": clientInfo.address_2,
-        "city": clientInfo.city,
-        "state": clientInfo.state,
-        "zipcode": clientInfo.zipcode,
-    }
+
+    user_profile = schemas.UserProfile(
+        username=user_credentials.username,
+        full_name=client_information.full_name,
+        address_1=client_information.address_1,
+        address_2=client_information.address_2,
+        city=client_information.city,
+        state=client_information.state,
+        zipcode=client_information.zipcode
+    )
+    return user_profile
 
 
 @router.get("/profile/{username}", response_model=schemas.UserProfile)
 async def get_profile_details_by_username(
-    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
-    client_information: models.ClientInformation = Depends(deps.get_client_information),
+    user_credentials: models.UserCredentials = Depends(
+        deps.get_user_credentials),
+    client_information: models.ClientInformation = Depends(
+        deps.get_client_information),
 ):
-    return {
-        "username": user_credentials.username,
-        "full_name": client_information.full_name,
-        "address_1": client_information.address_1,
-        "address_2": client_information.address_2,
-        "city": client_information.city,
-        "state": client_information.state,
-        "zipcode": client_information.zipcode,
-    }
+    user_profile = schemas.UserProfile(
+        username=user_credentials.username,
+        full_name=client_information.full_name,
+        address_1=client_information.address_1,
+        address_2=client_information.address_2,
+        city=client_information.city,
+        state=client_information.state,
+        zipcode=client_information.zipcode
+    )
+    return user_profile
