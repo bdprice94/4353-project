@@ -16,9 +16,7 @@ const Table: React.FC = () => {
   React.useEffect(() => {
     const username = getCookie("username");
     axios
-      .get(`${backendurl}/fuelquote/getfuelquote/${username}`, {
-        withCredentials: true
-      })
+      .get(`${backendurl}/fuelquote/getfuelquote/${username}`)
       .then((response) => {
         setFuelquotes(response.data);
         console.log(response.data);
