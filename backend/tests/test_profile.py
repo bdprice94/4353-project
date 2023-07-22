@@ -27,9 +27,7 @@ def test_update_profile(client: TestClient, db_session: Session):
             "state": "TX",
             "zipcode": 77004,
         },
-        cookies={
-            "username": "Professorsingh"
-        }
+        cookies={"username": "Professorsingh"},
     )
     assert response.status_code == 200
 
@@ -64,10 +62,7 @@ def test_get_profile_details_by_username(client: TestClient, db_session: Session
     db_session.add(profile)
     db_session.commit()
 
-    response = client.get("api/profile/Ella",
-                          cookies={
-                              "username": "Ella"
-                          })
+    response = client.get("api/profile/Ella", cookies={"username": "Ella"})
     assert response.status_code == 200
     assert response.json() == {
         "username": "Ella",

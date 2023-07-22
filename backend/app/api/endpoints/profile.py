@@ -13,8 +13,7 @@ router = APIRouter()
 @router.post("/{username}", response_model=schemas.UserProfile)
 async def update_profile(
     profile: schemas.UserProfile,
-    user_credentials: models.UserCredentials = Depends(
-        deps.get_user_credentials),
+    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
     db: Session = Depends(deps.get_session),
 ):
     if len(str(profile.zipcode)) > 9 or len(str(profile.zipcode)) < 5:
@@ -42,17 +41,15 @@ async def update_profile(
         address_2=client_information.address_2,
         city=client_information.city,
         state=client_information.state,
-        zipcode=client_information.zipcode
+        zipcode=client_information.zipcode,
     )
     return user_profile
 
 
 @router.get("/{username}", response_model=schemas.UserProfile)
 async def get_profile_details_by_username(
-    user_credentials: models.UserCredentials = Depends(
-        deps.get_user_credentials),
-    client_information: models.ClientInformation = Depends(
-        deps.get_client_information),
+    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
+    client_information: models.ClientInformation = Depends(deps.get_client_information),
 ):
     user_profile = schemas.UserProfile(
         username=user_credentials.username,
@@ -61,6 +58,6 @@ async def get_profile_details_by_username(
         address_2=client_information.address_2,
         city=client_information.city,
         state=client_information.state,
-        zipcode=client_information.zipcode
+        zipcode=client_information.zipcode,
     )
     return user_profile
