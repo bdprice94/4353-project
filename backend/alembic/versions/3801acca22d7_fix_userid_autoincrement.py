@@ -11,8 +11,8 @@ from app.models import UserCredentials
 
 
 # revision identifiers, used by Alembic.
-revision = '3801acca22d7'
-down_revision = '9aaf36f14d47'
+revision = "3801acca22d7"
+down_revision = "9aaf36f14d47"
 branch_labels = None
 depends_on = None
 
@@ -24,7 +24,8 @@ def upgrade() -> None:
     max_id = max_id if max_id is not None else 0
     op.execute(f"CREATE SEQUENCE user_id_seq START WITH {max_id + 1}")
     op.execute(
-        "ALTER TABLE usercredentials ALTER COLUMN id SET DEFAULT nextval('user_id_seq')")
+        "ALTER TABLE usercredentials ALTER COLUMN id SET DEFAULT nextval('user_id_seq')"
+    )
 
 
 def downgrade() -> None:
