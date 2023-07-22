@@ -41,25 +41,25 @@ Test Code Coverage:
 
 Current code coverage:
 ```
-Name                             Stmts   Miss  Cover
-----------------------------------------------------
-app/__init__.py                      0      0   100%
-app/api/__init__.py                  0      0   100%
-app/api/api.py                       8      0   100%
-app/api/deps.py                      7      4    43%
-app/api/endpoints/__init__.py        0      0   100%
-app/api/endpoints/fuelquote.py      24      0   100%
-app/api/endpoints/profile.py        28      4    86%
-app/api/endpoints/users.py          44     10    77%
-app/app.py                           6      0   100%
-app/database.py                      9      1    89%
-app/models.py                       26      0   100%
-app/schemas.py                      45      3    93%
-tests/__init__.py                    0      0   100%
-tests/conftest.py                   30      0   100%
-tests/test_fuelquote.py             38      0   100%
-tests/test_profile.py               22      0   100%
-tests/test_users.py                 33      0   100%
-----------------------------------------------------
-TOTAL                              320     22    93%
+Name                              Stmts   Miss  Cover
+-----------------------------------------------------
+app/__init__.py                       0      0   100%
+app/api/__init__.py                   0      0   100%
+app/api/api.py                        8      0   100%
+app/api/deps.py                      28      5    82%
+app/api/endpoints/__init__.py         0      0   100%
+app/api/endpoints/fuel_quote.py      17      0   100%
+app/api/endpoints/profile.py         20      1    95%
+app/api/endpoints/users.py           44     10    77%
+app/app.py                            6      0   100%
+app/database.py                       9      1    89%
+app/models.py                        26      0   100%
+app/schemas.py                       45      3    93%
+tests/__init__.py                     0      0   100%
+tests/conftest.py                    30      0   100%
+tests/test_fuelquote.py              34      0   100%
+tests/test_profile.py                21      0   100%
+tests/test_users.py                  32      0   100%
+-----------------------------------------------------
+TOTAL                               320     20    94%
 ```
