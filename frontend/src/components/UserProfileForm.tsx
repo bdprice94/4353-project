@@ -118,7 +118,7 @@ const UserProfileForm: React.FC = () => {
     const username = getCookie("username");
     console.log(username);
     axios
-      .post(`${backendurl_profile}/user_profile/${username}`, userprofile)
+      .post(`${backendurl_profile}/${username}`, userprofile)
       .then((response) => {
         alert(`${username} your profile has just been created!`);
         navigate("/user-profile-display");

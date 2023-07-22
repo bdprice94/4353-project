@@ -10,7 +10,7 @@ from app.api import deps
 router = APIRouter()
 
 
-@router.post("/user_profile/{username}", response_model=schemas.UserProfile)
+@router.post("/{username}", response_model=schemas.UserProfile)
 async def update_profile(
     profile: schemas.UserProfile,
     user_credentials: models.UserCredentials = Depends(
@@ -47,7 +47,7 @@ async def update_profile(
     return user_profile
 
 
-@router.get("/profile/{username}", response_model=schemas.UserProfile)
+@router.get("/{username}", response_model=schemas.UserProfile)
 async def get_profile_details_by_username(
     user_credentials: models.UserCredentials = Depends(
         deps.get_user_credentials),
