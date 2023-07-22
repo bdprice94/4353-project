@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./fqhist.module.css"
-import Navbar from "../../components/Navbar";
-import { getCookie, backendurl } from "../../utils";
-import axios, { AxiosError } from 'axios';
+import styles from "./FuelQuoteHistory.module.css"
+import Navbar from "./Navbar";
+import { getCookie, backendurl } from "../utils";
+import axios from 'axios';
 
 interface TableRow {
   gallons_requested: number;

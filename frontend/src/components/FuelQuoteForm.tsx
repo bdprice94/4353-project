@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import styles from './fqform.module.css';
-import Navbar from "../../components/Navbar";
-import { getCookie, backendurl } from "../../utils";
+import styles from './FuelQuoteForm.module.css';
+import Navbar from "./Navbar";
+import { getCookie, backendurl } from "../utils";
 import axios, { AxiosError } from 'axios';
 
 const CalendarInput: React.FC<{ value: Date, onChange: (date: Date) => void }> = ({ value, onChange }) => {

@@ -2,15 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
-
-
-
-
-
 const Navbar: React.FunctionComponent = () => {
-  
+
   return (
-   
+
     <nav className="navbar">
       <div className="navbar__logo">
         <Link to="/">
@@ -20,25 +15,25 @@ const Navbar: React.FunctionComponent = () => {
       <ul className="navbar__links">
         <li>
           <Link to="/fuel-quote-form">
-            
+
             Fuel Quote
           </Link>
         </li>
         <li>
           <Link to="/fuel-quote-history">
-            
+
             History
           </Link>
         </li>
         <li>
           <Link to="/user-profile-display">
-            
+
             Profile
           </Link>
         </li>
         <li>
           <Link to="/">
-            
+
             Sign out
           </Link>
         </li>
@@ -48,4 +43,4 @@ const Navbar: React.FunctionComponent = () => {
 };
 
 // Export the Navbar component as a default export
-export  default Navbar;
+export default Navbar;

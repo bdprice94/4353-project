@@ -1,8 +1,8 @@
 import React from 'react';
-import axios, {AxiosError} from 'axios';
-import { backendurl, setCookie } from './utils';
-import styles from "./LoginForm.module.css";
-import {useState} from 'react';
+import axios, { AxiosError } from 'axios';
+import { backendurl, setCookie } from '../utils';
+import styles from "./LoginPage.module.css";
+import { useState } from 'react';
 import { Navigate } from "react-router-dom";
 
 
@@ -11,7 +11,7 @@ const backendurl_users = `${backendurl}/users`; // will need to read from env if
 
 export interface UserLoginForm {
     username: { value: string },
-    password:  { value: string },
+    password: { value: string },
 }
 
 export interface UserLogin {
@@ -21,7 +21,7 @@ export interface UserLogin {
 
 export interface UserLoginResponse {
     username: string,
-    id:       number,
+    id: number,
 }
 
 const convertFormToModel = (form: UserLoginForm) => {
@@ -40,8 +40,8 @@ const LoginForm: React.FunctionComponent = () => {
         e.preventDefault();
         const target = e.target as typeof e.target & UserLoginForm;
         const userLoginForm = {
-            username: {value: target.username.value},
-            password: {value: target.password.value},
+            username: { value: target.username.value },
+            password: { value: target.password.value },
         };
         const userLogin = convertFormToModel(userLoginForm);
         axios.post(`${backendurl_users}/login`, userLogin)
@@ -77,17 +77,17 @@ const LoginForm: React.FunctionComponent = () => {
             });
     }
     return (
-        <form  className={styles.form} onSubmit={loginFormSubmit}>
+        <form className={styles.form} onSubmit={loginFormSubmit}>
             <label className={styles.label}>
                 Username: <input type='text' id='username' className={styles.input}></input>
             </label>
-            <br/>
+            <br />
             <label className={styles.label}>
                 Password: <input type='password' id='password' className={styles.input}></input>
             </label>
-            <br/>
-            <input type='submit' id ='submit' ></input>
-            {isLoggedIn && <Navigate to="/user-profile-form" />} 
+            <br />
+            <input type='submit' id='submit' ></input>
+            {isLoggedIn && <Navigate to="/user-profile-form" />}
         </form>
     )
 }

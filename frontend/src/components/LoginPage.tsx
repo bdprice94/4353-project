@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import RegisterForm from './RegisterForm';
-import LoginForm from './LoginForm';
+import RegisterForm from './LoginSignup';
+import LoginForm from './LoginSignin';
 
 const LoginPage: React.FunctionComponent = () => {
     const [needsLogin, setNeedsLogin] = useState(false)
@@ -13,8 +13,8 @@ const LoginPage: React.FunctionComponent = () => {
 
     return (
         <div>
-            <FormToRender/>
-            <br/>
+            <FormToRender />
+            <br />
             <button id="register_or_login" onClick={changeLoginOrRegister}>
                 {needsLogin ? "Register" : "Login"}
             </button>

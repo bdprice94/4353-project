@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./UserProfileDisplay.module.css";
-import Navbar from "../components/Navbar";
+import Navbar from "./Navbar";
 import { getCookie, backendurl } from "../utils";
 import { UserProfile } from "./UserProfileForm";
 
