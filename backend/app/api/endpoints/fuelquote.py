@@ -2,7 +2,6 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from datetime import date,datetime
 import app.models as models
 import app.schemas as schemas
 from app.api import deps
@@ -11,16 +10,9 @@ router = APIRouter()
 
 
 @router.post("/fuelquote/{username}", response_model=schemas.FuelQuote)
-async def submit_fuelquote_form(username: str, fuelquote: schemas.FuelQuote, db: Session = Depends(deps.get_session)):
-    userid = db.query(models.UserCredentials.id).filter(models.UserCredentials.username == username).scalar()
-    if userid is None:
-       raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    clientInfo = db.query(models.ClientInformation).filter(models.ClientInformation.userid == userid).first()
-    if clientInfo is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-
+async def submit_fuelquote_form(fuelquote: schemas.FuelQuote, user_credentials: models.UserCredentials = Depends(deps.get_user_credentials), client_information: models.ClientInformation = Depends(deps.get_client_information), db: Session = Depends(deps.get_session)):
     fuelquote = models.FuelQuote(
-        username=username,
+        username=user_credentials.username,
         gallons_requested=fuelquote.gallons_requested,
         delivery_address=fuelquote.delivery_address,
         delivery_date=fuelquote.delivery_date,
@@ -29,7 +21,7 @@ async def submit_fuelquote_form(username: str, fuelquote: schemas.FuelQuote, db:
     )
     db.add(fuelquote)
     db.commit()
-    return {"username": username,
+    return {"username": user_credentials.username,
             "gallons_requested": fuelquote.gallons_requested,
             "delivery_address": fuelquote.delivery_address,
             "delivery_date": fuelquote.delivery_date,
@@ -39,6 +31,7 @@ async def submit_fuelquote_form(username: str, fuelquote: schemas.FuelQuote, db:
 
 
 @router.get("/getfuelquote/{username}", response_model=List[schemas.FuelQuote])
-async def get_fuelquotes_by_user(username: str, db: Session = Depends(deps.get_session)):
-    fuelquote = db.query(models.FuelQuote).filter(models.FuelQuote.username == username).all()
+async def get_fuelquotes_by_user(user_credentials: models.UserCredentials = Depends(deps.get_user_credentials), db: Session = Depends(deps.get_session)):
+    fuelquote = db.query(models.FuelQuote).filter(
+        models.FuelQuote.username == user_credentials.username).all()
     return fuelquote
