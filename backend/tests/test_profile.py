@@ -2,7 +2,6 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 import app.models as models
-import app.schemas as schemas
 
 import bcrypt
 
@@ -18,7 +17,7 @@ def test_update_profile(client: TestClient, db_session: Session):
     db_session.add(professor)
     db_session.commit()
     response = client.post(
-        "/api/profile/user_profile/Professorsingh",
+        "/api/profile/Professorsingh",
         json={
             "username": "Professorsingh",
             "full_name": "Raj Singh",
@@ -28,6 +27,9 @@ def test_update_profile(client: TestClient, db_session: Session):
             "state": "TX",
             "zipcode": 77004,
         },
+        cookies={
+            "username": "Professorsingh"
+        }
     )
     assert response.status_code == 200
 
@@ -62,7 +64,10 @@ def test_get_profile_details_by_username(client: TestClient, db_session: Session
     db_session.add(profile)
     db_session.commit()
 
-    response = client.get("api/profile/profile/Ella")
+    response = client.get("api/profile/Ella",
+                          cookies={
+                              "username": "Ella"
+                          })
     assert response.status_code == 200
     assert response.json() == {
         "username": "Ella",
