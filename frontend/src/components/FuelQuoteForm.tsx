@@ -91,7 +91,7 @@ const FuelQuoteForm: React.FC = () => {
     console.log(fuelquote);
     const fuelquoteModel = convertFormToModel(fuelquote);
     axios
-      .post(`${backendurl}/fuelquote/fuelquote/${username}`, fuelquoteModel)
+      .post(`${backendurl}/fuel_quote/`, fuelquoteModel)
       .then((response) => {
         alert(`${username} your fuel quote has just been created!`);
       })

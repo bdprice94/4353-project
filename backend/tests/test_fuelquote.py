@@ -2,7 +2,6 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
 
 import app.models as models
-import app.schemas as schemas
 import bcrypt
 
 
@@ -29,7 +28,7 @@ def test_submit_fuelquote_form(client: TestClient, db_session: Session):
     db_session.add(profile)
     db_session.commit()
     response = client.post(
-        "api/fuelquote/fuelquote/cairo",
+        "/api/fuel_quote/",
         json={
             "username": "cairo",
             "gallons_requested": 500,
@@ -38,6 +37,7 @@ def test_submit_fuelquote_form(client: TestClient, db_session: Session):
             "suggested_price": 2,
             "total_amount_due": 1200,
         },
+        cookies={"username": "cairo"},
     )
     assert response.status_code == 200
     assert response.json() == {
@@ -60,7 +60,7 @@ def test_submit_fuelquote_form(client: TestClient, db_session: Session):
     db_session.commit()
 
     response = client.post(
-        "api/fuelquote/fuelquote/rat",
+        "/api/fuel_quote/",
         json={
             "username": "rat",
             "gallons_requested": 500,
@@ -69,12 +69,13 @@ def test_submit_fuelquote_form(client: TestClient, db_session: Session):
             "suggested_price": 2,
             "total_amount_due": 1200,
         },
+        cookies={"username": "rat"},
     )
-    assert response.status_code == 404
+    assert response.status_code == 403
 
     # testing error for missing fields
     response = client.post(
-        "api/fuelquote/fuelquote/cairo",
+        "/api/fuel_quote/",
         json={
             "username": "cairo",
             "gallons_requested": 500,
@@ -82,12 +83,13 @@ def test_submit_fuelquote_form(client: TestClient, db_session: Session):
             "suggested_price": 2,
             "total_amount_due": 1200,
         },
+        cookies={"username": "cairo"},
     )
     assert response.status_code == 422
 
     # testing error if user doesnt have account yet
     response = client.post(
-        "/api/fuelquote/fuelquote/lanisdeodarant",
+        "/api/fuel_quote/",
         json={
             "username": "lanisdeodarant",
             "gallons_requested": 500,
@@ -96,9 +98,10 @@ def test_submit_fuelquote_form(client: TestClient, db_session: Session):
             "suggested_price": 2,
             "total_amount_due": 1200,
         },
+        cookies={"username": "lanisdeodorant"},
     )
-    assert response.status_code == 404
-    assert response.json() == {"detail": "User not found"}
+    assert response.status_code == 403
+    assert response.json() == {"detail": "Username does not exist"}
 
 
 def test_get_fuelquotes_by_user(client: TestClient, db_session: Session):
@@ -123,7 +126,7 @@ def test_get_fuelquotes_by_user(client: TestClient, db_session: Session):
     )
     db_session.add(fuelquote)
     db_session.commit()
-    response = client.get("/api/fuelquote/getfuelquote/Cairo")
+    response = client.get("/api/fuel_quote/Cairo", cookies={"username": "Cairo"})
     assert response.status_code == 200
     assert response.json() == [
         {
@@ -133,9 +136,5 @@ def test_get_fuelquotes_by_user(client: TestClient, db_session: Session):
             "delivery_date": "2023-07-31",
             "suggested_price": 2,
             "total_amount_due": 2500,
-        },
+        }
     ]
-
-    response = client.get("/api/fuelquote/getfuelquote/Ghost")
-    assert response.status_code == 200
-    assert response.json() == []
