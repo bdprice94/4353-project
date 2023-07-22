@@ -1,25 +1,25 @@
 from pydantic import BaseModel, validator
 from typing import Optional
-from datetime import date,datetime
+from datetime import date, datetime
 
 
 class UserBase(BaseModel):
     username: str
 
-    @validator('username')
+    @validator("username")
     def username_must_not_be_empty(cls, v):
         if len(v) < 1:
-            raise ValueError('Username must not be empty')
+            raise ValueError("Username must not be empty")
         return v
 
 
 class UserLogin(UserBase):
     password: str
 
-    @validator('password')
+    @validator("password")
     def password_must_not_be_empty(cls, v):
         if len(v) < 1:
-            raise ValueError('Password must not be empty')
+            raise ValueError("Password must not be empty")
         return v
 
 
@@ -27,10 +27,10 @@ class UserCreate(UserBase):
     password: str
     password2: str
 
-    @validator('password', 'password2')
+    @validator("password", "password2")
     def password_must_not_be_empty(cls, v):
         if len(v) < 1:
-            raise ValueError('Password must not be empty')
+            raise ValueError("Password must not be empty")
         return v
 
 
@@ -56,7 +56,7 @@ class User(UserBase):
 class UserProfile(UserBase):
     full_name: str
     address_1: str
-    address_2: Optional[str] | 'None'
+    address_2: Optional[str] | "None"
     city: str
     state: str
     zipcode: int

@@ -1,0 +1,40 @@
+.formcontainer {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.formcontainer h1 {
+  text-align: center;
+  color: #26474e;
+}
+
+.formcontainer form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.formcontainer label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #26474e;
+}
+
+.formcontainer input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.formcontainer button {
+  padding: 8px 16px;
+  background-color: blue;
+  color: #b0e1ff;
+  border: none;
+  cursor: pointer;
+}
+
+.formcontainer button:hover {
+  background-color: blue;
+}

@@ -22,23 +22,33 @@ def contains_special_char(password):
 
 
 @router.post("/create_user", status_code=status.HTTP_201_CREATED)
-async def create_user(user: schemas.UserCreate, db: Session = Depends(deps.get_session)):
-    if len(user.password) < 8 \
-            or user.password != user.password2 \
-            or not contains_special_char(user.password):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Please ensure that the password is at least 8 characters, "
-                            + "that the passwords match, and that the password contains a special "
-                            + "character")
-    hash_pass = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
-    user = models.UserCredentials(username=user.username, password=hash_pass)
+async def create_user(
+    user: schemas.UserCreate, db: Session = Depends(deps.get_session)
+):
+    if (
+        len(user.password) < 8
+        or user.password != user.password2
+        or not contains_special_char(user.password)
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please ensure that the password is at least 8 characters, "
+            + "that the passwords match, and that the password contains a special "
+            + "character",
+        )
+    hash_pass = bcrypt.hashpw(user.password.encode("utf-8"), bcrypt.gensalt())
+    user = models.UserCredentials(
+        username=user.username, password=str(hash_pass, "utf-8")
+    )
     try:
         db.add(user)
         db.commit()
     except IntegrityError as e:
         print(e)
-        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                            detail="Username already exits")
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Username already exits",
+        )
 
     return {"username": user.username}
 
@@ -53,14 +63,20 @@ async def get_users(db: Session = Depends(deps.get_session)):
 async def login(user: schemas.UserLogin, db: Session = Depends(deps.get_session)):
     user_m = models.UserCredentials
     try:
-        user_data = db.query(user_m)\
-            .where(user_m.username == user.username).first()
-        if not user_data or not bcrypt.checkpw(user.password.encode('utf-8'), user_data.password):
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                                detail="Incorrect username or password")
+        user_data = db.query(user_m).where(
+            user_m.username == user.username).first()
+        if not user_data or not bcrypt.checkpw(
+            user.password.encode("utf-8"), user_data.password.encode("utf-8")
+        ):
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Incorrect username or password",
+            )
     except exc.FlushError as e:
         print(e)
         db.rollback()
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail="Incorrect username or password")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Incorrect username or password",
+        )
     return {"id": user_data.id, "username": user_data.username}

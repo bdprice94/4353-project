@@ -1,15 +1,14 @@
 .tablecontainer {
   width: 100%;
 }
-.tablecontainer h1{
-color: #26474E;
+.tablecontainer h1 {
+  color: #26474e;
 }
 .tablecontainer table {
   width: 100%;
   border-collapse: collapse;
   border-style: groove;
-  border:15px solid #B0E1FF;;
-
+  border: 15px solid #b0e1ff;
 }
 
 .tablecontainer th,
@@ -17,19 +16,19 @@ color: #26474E;
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #c4ebf1;
-  color: #26474E
+  color: #26474e;
 }
 
 .tablecontainer th {
-  background-color: ;
+  background-color:;
   font-weight: bold;
-  color: #26474E;
+  color: #26474e;
 }
 
 .tablecontainer tbody tr:nth-child(even) {
-  background-color: #c4ebf1 !important;;
+  background-color: #c4ebf1 !important;
 }
 
 .tablecontainer tbody tr:hover {
-  background-color: #B0E1FF;
+  background-color: #b0e1ff;
 }

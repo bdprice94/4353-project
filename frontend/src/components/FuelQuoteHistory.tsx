@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "./fqhist.module.css"
-import Navbar from "../../Navbar/Navbar";
-import { getCookie, backendurl } from "../../utils";
-import axios, { AxiosError } from 'axios';
+import styles from "./FuelQuoteHistory.module.css";
+import Navbar from "./Navbar";
+import { getCookie, backendurl } from "../authentication";
+import axios from "axios";
 
 interface TableRow {
   gallons_requested: number;
@@ -14,8 +14,8 @@ interface TableRow {
 const Table: React.FC = () => {
   const [fuelquotes, setFuelquotes] = React.useState<TableRow[]>([]);
   React.useEffect(() => {
-    const username = getCookie('username');
-    axios.get(`${backendurl}/fuelquote/getfuelquote/${username}`).then((response) => {
+    const username = getCookie("username");
+    axios.get(`${backendurl}/fuel_quote/${username}`).then((response) => {
       setFuelquotes(response.data);
       console.log(response.data);
     });

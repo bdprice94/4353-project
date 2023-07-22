@@ -3,8 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./UserProfileDisplay.module.css";
-import Navbar from "../Navbar/Navbar";
-import { getCookie, backendurl } from "../utils";
+import Navbar from "./Navbar";
+import { getCookie, backendurl } from "../authentication";
 import { UserProfile } from "./UserProfileForm";
 
 const UserProfileDisplay: React.FC = () => {
@@ -18,9 +18,7 @@ const UserProfileDisplay: React.FC = () => {
   const fetchUserProfile = async () => {
     const username = getCookie("username");
     try {
-      const response = await axios.get(
-        `${backendurl_profile}/profile/${username}`
-      );
+      const response = await axios.get(`${backendurl_profile}/${username}`);
       setUserProfile(response.data);
     } catch (error) {
       console.error(error);
