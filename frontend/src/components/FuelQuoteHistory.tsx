@@ -15,12 +15,10 @@ const Table: React.FC = () => {
   const [fuelquotes, setFuelquotes] = React.useState<TableRow[]>([]);
   React.useEffect(() => {
     const username = getCookie("username");
-    axios
-      .get(`${backendurl}/fuel_quote/${username}`)
-      .then((response) => {
-        setFuelquotes(response.data);
-        console.log(response.data);
-      });
+    axios.get(`${backendurl}/fuel_quote/${username}`).then((response) => {
+      setFuelquotes(response.data);
+      console.log(response.data);
+    });
   }, []);
 
   return (

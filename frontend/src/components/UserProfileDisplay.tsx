@@ -18,9 +18,7 @@ const UserProfileDisplay: React.FC = () => {
   const fetchUserProfile = async () => {
     const username = getCookie("username");
     try {
-      const response = await axios.get(
-        `${backendurl_profile}/${username}`,
-      );
+      const response = await axios.get(`${backendurl_profile}/${username}`);
       setUserProfile(response.data);
     } catch (error) {
       console.error(error);

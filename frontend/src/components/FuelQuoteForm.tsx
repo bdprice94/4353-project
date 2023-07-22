@@ -59,7 +59,7 @@ const FuelQuoteForm: React.FC = () => {
     const username = getCookie("username");
     try {
       const response = await axios.get(
-        `${backendurl_profile}/profile/${username}`
+        `${backendurl_profile}/profile/${username}`,
       );
       setAddress(response.data.address_1);
     } catch (error) {
