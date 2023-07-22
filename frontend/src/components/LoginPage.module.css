@@ -7,7 +7,7 @@
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #26474E;
+  border: 1px solid #26474e;
   border-radius: 10px;
 }
 
@@ -20,14 +20,14 @@
   width: 80%;
   padding: 5px;
   border: none;
-  border-bottom: 2px solid #26474E;
+  border-bottom: 2px solid #26474e;
 }
 
 .submit {
   width: 50%;
   padding: 10px;
   margin-top: 20px;
-  background-color: #26474E;
+  background-color: #26474e;
   color: white;
   border: none;
   border-radius: 5px;

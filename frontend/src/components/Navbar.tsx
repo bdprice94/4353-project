@@ -4,14 +4,12 @@ import "./Navbar.css";
 import { deleteCookie } from "../authentication";
 
 function signOut() {
-  deleteCookie("username")
-  deleteCookie("userId")
+  deleteCookie("username");
+  deleteCookie("userId");
 }
 
 const Navbar: React.FunctionComponent = () => {
-
   return (
-
     <nav className="navbar">
       <div className="navbar__logo">
         <Link to="/">
@@ -20,19 +18,13 @@ const Navbar: React.FunctionComponent = () => {
       </div>
       <ul className="navbar__links">
         <li>
-          <Link to="/fuel-quote-form">
-            Fuel Quote
-          </Link>
+          <Link to="/fuel-quote-form">Fuel Quote</Link>
         </li>
         <li>
-          <Link to="/fuel-quote-history">
-            History
-          </Link>
+          <Link to="/fuel-quote-history">History</Link>
         </li>
         <li>
-          <Link to="/user-profile-display">
-            Profile
-          </Link>
+          <Link to="/user-profile-display">Profile</Link>
         </li>
         <li>
           <Link to="/" onClick={signOut}>

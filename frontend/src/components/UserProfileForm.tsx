@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styles from "./UserProfileForm.module.css";
 import Navbar from "../components/Navbar";
-import axios, { AxiosError } from 'axios';
-import { getCookie, backendurl } from "../authentication"
+import axios, { AxiosError } from "axios";
+import { getCookie, backendurl } from "../authentication";
 import { useNavigate } from "react-router-dom";
 
 const states = [
@@ -55,27 +55,25 @@ const states = [
   { code: "WA" },
   { code: "WV" },
   { code: "WI" },
-  { code: "WY" }
-
+  { code: "WY" },
 ];
 
-
 export interface ProfileForm {
-  full_name: { value: string },
-  address_1: { value: string },
-  address_2?: { value: string },
-  city: { value: string },
-  state: { value: string },
-  zipcode: { value: number },
+  full_name: { value: string };
+  address_1: { value: string };
+  address_2?: { value: string };
+  city: { value: string };
+  state: { value: string };
+  zipcode: { value: number };
 }
 export interface UserProfile {
-  username: string,
-  full_name: string,
-  address_1: string,
-  address_2?: string,
-  city: string,
-  state: string,
-  zipcode: number
+  username: string;
+  full_name: string;
+  address_1: string;
+  address_2?: string;
+  city: string;
+  state: string;
+  zipcode: number;
 }
 
 const convertFormToModel = (form: UserProfile) => {
@@ -86,11 +84,9 @@ const convertFormToModel = (form: UserProfile) => {
     address_2: form.address_2,
     city: form.city,
     state: form.state,
-    zipcode: form.zipcode
-
-  }
-}
-
+    zipcode: form.zipcode,
+  };
+};
 
 const UserProfileForm: React.FC = () => {
   const [fullName, setFullName] = useState("");
@@ -115,41 +111,35 @@ const UserProfileForm: React.FC = () => {
       address_2: target.address_2?.value,
       city: target.city.value,
       state: target.state.value,
-      zipcode: target.zipcode.value
+      zipcode: target.zipcode.value,
     };
-
 
     const userprofile = convertFormToModel(profile);
     const username = getCookie("username");
     console.log(username);
-    axios.post(`${backendurl_profile}/user_profile/${username}`, userprofile,)
-      .then(response => {
+    axios
+      .post(`${backendurl_profile}/user_profile/${username}`, userprofile)
+      .then((response) => {
         alert(`${username} your profile has just been created!`);
         navigate("/user-profile-display");
       })
       .catch((e: AxiosError) => {
-
-        let errString = "Sorry, we don't know what happened. Please verify information is correct";
-        if ('response' in e && e.response !== undefined) {
+        let errString =
+          "Sorry, we don't know what happened. Please verify information is correct";
+        if ("response" in e && e.response !== undefined) {
           if (e.response.status === 422) {
             const data = e.response.data as { detail: Array<string> };
-            errString = data.detail
-              .map((err: any) => err.msg)
-              .join('\n');
-          }
-          else if (e.response.status === 404) {
+            errString = data.detail.map((err: any) => err.msg).join("\n");
+          } else if (e.response.status === 404) {
             const data = e.response.data as { detail: string };
             errString = data.detail;
-          }
-          else if (e.response.status === 400) {
+          } else if (e.response.status === 400) {
             const data = e.response.data as { detail: string };
             errString = data.detail;
-          }
-          else {
+          } else {
             console.log(e.response.data);
           }
-        }
-        else {
+        } else {
           console.log(e);
         }
         alert(errString);
@@ -158,7 +148,6 @@ const UserProfileForm: React.FC = () => {
 
   return (
     <>
-
       <div className={styles.body}>
         <Navbar />
 
@@ -209,7 +198,6 @@ const UserProfileForm: React.FC = () => {
               id="state"
               value={state}
               onChange={(e) => setState(e.target.value)}
-
             >
               <option value="">Select a state</option>
               {states.map((s) => (

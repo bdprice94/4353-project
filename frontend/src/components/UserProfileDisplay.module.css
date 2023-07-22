@@ -4,22 +4,20 @@
   align-items: center;
   max-width: 600px;
   margin: 0 auto;
-  border: 15px solid #B0E1FF;
+  border: 15px solid #b0e1ff;
   align-items: center;
   font-family: Arial, sans-serif;
   background-color: #c4ebf1;
   border-style: groove;
-
 }
 
 .userprofiledisplay h2 {
-  color: #26474E;
+  color: #26474e;
 }
 
 .userprofiledisplay p {
   margin: 10px;
   color: #0d6efd;
-
 }
 
 .userprofiledisplay button {
@@ -33,8 +31,12 @@
   border: 1px solid transparent;
   padding: 6px 12px;
   font-size: 1rem;
-  border-radius: .25rem;
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  border-radius: 0.25rem;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   color: #0d6efd;
   border-color: #0d6efd;
 }

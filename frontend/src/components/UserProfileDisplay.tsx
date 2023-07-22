@@ -19,7 +19,7 @@ const UserProfileDisplay: React.FC = () => {
     const username = getCookie("username");
     try {
       const response = await axios.get(
-        `${backendurl_profile}/profile/${username}`
+        `${backendurl_profile}/profile/${username}`,
       );
       setUserProfile(response.data);
     } catch (error) {
