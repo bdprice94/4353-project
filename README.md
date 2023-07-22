@@ -24,6 +24,9 @@ Frontend:
     `npm install`
     `npm start`
 
+Frontend formatting:
+    `npx prettier . --write`
+
 Tests:
     `cd backend`
     `pytest`
