@@ -31,7 +31,8 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(deps.get_s
                             + "that the passwords match, and that the password contains a special "
                             + "character")
     hash_pass = bcrypt.hashpw(user.password.encode('utf-8'), bcrypt.gensalt())
-    user = models.UserCredentials(username=user.username, password=hash_pass)
+    user = models.UserCredentials(
+        username=user.username, password=str(hash_pass, 'utf-8'))
     try:
         db.add(user)
         db.commit()
@@ -55,7 +56,7 @@ async def login(user: schemas.UserLogin, db: Session = Depends(deps.get_session)
     try:
         user_data = db.query(user_m)\
             .where(user_m.username == user.username).first()
-        if not user_data or not bcrypt.checkpw(user.password.encode('utf-8'), user_data.password):
+        if not user_data or not bcrypt.checkpw(user.password.encode('utf-8'), user_data.password.encode('utf-8')):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                                 detail="Incorrect username or password")
     except exc.FlushError as e:
