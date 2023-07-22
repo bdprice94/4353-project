@@ -19,6 +19,9 @@ Backend:
     `pip install -r requirements.txt`
     `python main.py`
 
+Backend formatting:
+    `python -m black ./`
+
 Frontend:
     `cd frontend`
     `npm install`
