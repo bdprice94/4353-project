@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./fqhist.module.css"
-import Navbar from "../../Navbar/Navbar";
+import Navbar from "../../components/Navbar";
 import { getCookie, backendurl } from "../../utils";
 import axios, { AxiosError } from 'axios';
 
