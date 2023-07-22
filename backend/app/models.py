@@ -8,13 +8,14 @@ class UserCredentials(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
-    password = Column(LargeBinary)
+    password = Column(String)
 
 
 class ClientInformation(Base):
     __tablename__ = "clientinformation"
 
-    userid = Column(Integer, ForeignKey(UserCredentials.id), primary_key=True, index=True)
+    userid = Column(Integer, ForeignKey(UserCredentials.id),
+                    primary_key=True, index=True)
     full_name = Column(String)
     address_1 = Column(String)
     address_2 = Column(String, nullable=True)
