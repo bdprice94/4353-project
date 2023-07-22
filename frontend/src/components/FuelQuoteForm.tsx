@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from './FuelQuoteForm.module.css';
 import Navbar from "./Navbar";
-import { getCookie, backendurl } from "../utils";
+import { getCookie, backendurl } from "../authentication";
 import axios, { AxiosError } from 'axios';
 
 const CalendarInput: React.FC<{ value: Date, onChange: (date: Date) => void }> = ({ value, onChange }) => {

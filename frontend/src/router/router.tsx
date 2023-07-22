@@ -7,13 +7,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 const Routing = () => (
     <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<LoginPage />} />
-            <Route path="/user-profile-form" element={<UserProfileForm />} />
-            <Route path="/user-profile-display" element={<UserProfileDisplay />} />
-            <Route path="/fuel-quote-form" element={<FuelQuoteForm />} />
-            <Route path="/fuel-quote-history" element={<FuelQuoteHistory />} />
-        </Routes>
+                <Routes>
+                    <Route path="/" element={<LoginPage />} />
+                    <Route path="/user-profile-form" element={<UserProfileForm />} />
+                    <Route path="/user-profile-display" element={<UserProfileDisplay />} />
+                    <Route path="/fuel-quote-form" element={<FuelQuoteForm />} />
+                    <Route path="/fuel-quote-history" element={<FuelQuoteHistory />} />
+                </Routes>
     </BrowserRouter>
 )
 

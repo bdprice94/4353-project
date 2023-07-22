@@ -1,6 +1,6 @@
 import React from 'react';
 import axios, { AxiosError } from 'axios';
-import { backendurl, setCookie } from '../utils';
+import { backendurl, setCookie } from '../authentication';
 import styles from "./LoginPage.module.css";
 import { useState } from 'react';
 import { Navigate } from "react-router-dom";

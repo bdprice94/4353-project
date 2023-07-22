@@ -1,6 +1,6 @@
 import React from 'react';
 import axios, { AxiosError } from 'axios';
-import { backendurl } from '../utils';
+import { backendurl } from '../authentication';
 import styles from "./LoginPage.module.css";
 
 

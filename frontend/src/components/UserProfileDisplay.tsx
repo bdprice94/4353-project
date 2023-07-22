@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import styles from "./UserProfileDisplay.module.css";
 import Navbar from "./Navbar";
-import { getCookie, backendurl } from "../utils";
+import { getCookie, backendurl } from "../authentication";
 import { UserProfile } from "./UserProfileForm";
 
 const UserProfileDisplay: React.FC = () => {

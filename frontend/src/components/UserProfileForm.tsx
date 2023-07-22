@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./UserProfileForm.module.css";
 import Navbar from "../components/Navbar";
 import axios, { AxiosError } from 'axios';
-import { getCookie, backendurl } from "../utils"
+import { getCookie, backendurl } from "../authentication"
 import { useNavigate } from "react-router-dom";
 
 const states = [

@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./FuelQuoteHistory.module.css"
 import Navbar from "./Navbar";
-import { getCookie, backendurl } from "../utils";
+import { getCookie, backendurl } from "../authentication";
 import axios from 'axios';
 
 interface TableRow {
