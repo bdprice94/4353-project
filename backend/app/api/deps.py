@@ -22,6 +22,7 @@ def get_username(cookie: str | None = Cookie(default=None, alias='username')) ->
     # this is not secure, but here we could call our authentication methodologies to confirm
     # whether or not what's in the cookie is correct and trusted.
     # This is pseudosecurity, we will trust our users to never fake a cookie. :)
+    print(cookie)
     if not cookie:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Invalid authentication")
