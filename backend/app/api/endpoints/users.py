@@ -47,7 +47,7 @@ async def create_user(
         print(e)
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="Username already exits",
+            detail="Username already exists",
         )
 
     return {"username": user.username}
@@ -62,19 +62,10 @@ async def get_users(db: Session = Depends(deps.get_session)):
 @router.post("/login", response_model=schemas.User)
 async def login(user: schemas.UserLogin, db: Session = Depends(deps.get_session)):
     user_m = models.UserCredentials
-    try:
-        user_data = db.query(user_m).where(
-            user_m.username == user.username).first()
-        if not user_data or not bcrypt.checkpw(
-            user.password.encode("utf-8"), user_data.password.encode("utf-8")
-        ):
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Incorrect username or password",
-            )
-    except exc.FlushError as e:
-        print(e)
-        db.rollback()
+    user_data = db.query(user_m).where(user_m.username == user.username).first()
+    if not user_data or not bcrypt.checkpw(
+        user.password.encode("utf-8"), user_data.password.encode("utf-8")
+    ):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Incorrect username or password",
