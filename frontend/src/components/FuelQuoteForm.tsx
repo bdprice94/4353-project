@@ -19,7 +19,6 @@ const CalendarInput: React.FC<{
     />
   );
 };
-const username = getCookie("username");
 
 export interface FuelQuoteForm {
   gallons_requested: { value: number };
@@ -55,11 +54,15 @@ const FuelQuoteForm: React.FC = () => {
   const [totalAmount, setTotalAmount] = useState("");
   const [deliveryDate, setDeliveryDate] = useState<Date>(new Date());
 
+  const username = getCookie("username");
   const fetchUserAddress = async () => {
+      if (address !== "") {
+          return
+      }
     const username = getCookie("username");
     try {
       const response = await axios.get(
-        `${backendurl_profile}/profile/${username}`,
+        `${backendurl_profile}/${username}`,
       );
       setAddress(response.data.address_1);
     } catch (error) {

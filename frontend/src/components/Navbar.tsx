@@ -5,7 +5,7 @@ import { deleteCookie } from "../authentication";
 
 function signOut() {
   deleteCookie("username");
-  deleteCookie("userId");
+  deleteCookie("userid");
 }
 
 const Navbar: React.FunctionComponent = () => {
