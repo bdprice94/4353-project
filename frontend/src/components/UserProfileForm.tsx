@@ -98,52 +98,52 @@ const UserProfileForm: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  const backendurl_profile = `${backendurl}/profile`;
+    const backendurl_profile = `${backendurl}/profile`;
 
-  e.preventDefault();
+    e.preventDefault();
 
-  const target = e.target as typeof e.target & ProfileForm;
+    const target = e.target as typeof e.target & ProfileForm;
 
-  const profile = {
-    username: getCookie("username") as string,
-    full_name: target.full_name.value,
-    address_1: target.address_1.value,
-    address_2: target.address_2?.value,
-    city: target.city.value,
-    state: target.state.value,
-    zipcode: target.zipcode.value,
-  };
+    const profile = {
+      username: getCookie("username") as string,
+      full_name: target.full_name.value,
+      address_1: target.address_1.value,
+      address_2: target.address_2?.value,
+      city: target.city.value,
+      state: target.state.value,
+      zipcode: target.zipcode.value,
+    };
 
-  const userprofile = convertFormToModel(profile);
-  const username = getCookie("username");
-  console.log(username);
-  axios
-    .post(`${backendurl_profile}/${username}`, userprofile)
-    .then((response) => {
-      alert(`${username} your profile has just been created!`);
-      navigate("/user-profile-display");
-    })
-    .catch((e: AxiosError) => {
-      let errString =
-        "Sorry, we don't know what happened. Please verify information is correct";
-      if ("response" in e && e.response !== undefined) {
-        if (e.response.status === 422) {
-          const data = e.response.data as { detail: Array<string> };
-          errString = data.detail.map((err: any) => err.msg).join("\n");
-        } else if (e.response.status === 404) {
-          const data = e.response.data as { detail: string };
-          errString = data.detail;
-        } else if (e.response.status === 400) {
-          const data = e.response.data as { detail: string };
-          errString = data.detail;
+    const userprofile = convertFormToModel(profile);
+    const username = getCookie("username");
+    console.log(username);
+    axios
+      .post(`${backendurl_profile}/${username}`, userprofile)
+      .then((response) => {
+        alert(`${username} your profile has just been created!`);
+        navigate("/user-profile-display");
+      })
+      .catch((e: AxiosError) => {
+        let errString =
+          "Sorry, we don't know what happened. Please verify information is correct";
+        if ("response" in e && e.response !== undefined) {
+          if (e.response.status === 422) {
+            const data = e.response.data as { detail: Array<string> };
+            errString = data.detail.map((err: any) => err.msg).join("\n");
+          } else if (e.response.status === 404) {
+            const data = e.response.data as { detail: string };
+            errString = data.detail;
+          } else if (e.response.status === 400) {
+            const data = e.response.data as { detail: string };
+            errString = data.detail;
+          } else {
+            console.log(e.response.data);
+          }
         } else {
-          console.log(e.response.data);
+          console.log(e);
         }
-      } else {
-        console.log(e);
-      }
-      alert(errString);
-    });
+        alert(errString);
+      });
   };
 
   return (
