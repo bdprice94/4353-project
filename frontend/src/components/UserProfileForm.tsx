@@ -152,7 +152,7 @@ const UserProfileForm: React.FC = () => {
         <Navbar />
 
         <form className={styles.userprofileform} onSubmit={handleSubmit}>
-          <div className="form-group">
+          <div className={styles.formgroup}>
             <label htmlFor="full_name">Full Name:</label>
             <input
               id="full_name"
@@ -182,7 +182,7 @@ const UserProfileForm: React.FC = () => {
               maxLength={100}
             />
           </div>
-          <div className="form-group">
+          <div className={styles.formgroup}>
             <label htmlFor="city">City:</label>
             <input
               id="city"
@@ -192,7 +192,7 @@ const UserProfileForm: React.FC = () => {
               maxLength={100}
             />
           </div>
-          <div className="form-group">
+          <div className={styles.formgroup}>
             <label htmlFor="state">State:</label>
             <select
               id="state"

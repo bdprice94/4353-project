@@ -9,16 +9,19 @@ const LoginPage: React.FunctionComponent = () => {
     setNeedsLogin(!needsLogin);
   };
 
+ 
   const FormToRender: React.FunctionComponent<{}> = needsLogin
-    ? LoginForm
-    : RegisterForm;
+  ? LoginForm
+  : RegisterForm;
+
+    
 
   return (
-    <div>
+    <div style={{  justifyContent: "center" }}>
       <FormToRender />
       <br />
-      <button id="register_or_login" onClick={changeLoginOrRegister}>
-        {needsLogin ? "Register" : "Login"}
+      <button id="register_or_login" onClick={changeLoginOrRegister} style={{border: "1px solid #26474e", borderRadius: "5px", padding: "10px",margin: "10px",position: "absolute",top: "80%",right: "600px",transform: "translateY(-50%)"}}>
+        {needsLogin ? "Don't have an account yet? Click to Register" : "Already have an account? Sign in here!"}
       </button>
     </div>
   );

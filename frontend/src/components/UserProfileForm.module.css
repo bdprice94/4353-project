@@ -4,7 +4,7 @@ body {
 
 .userprofileform {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(3, auto);
   justify-items: start;
   font-family: Arial, sans-serif;
@@ -23,12 +23,16 @@ body {
   display: flex;
   flex-direction: column;
   margin: 10px;
+  align-items: center;
 }
 .formgroup label {
   color: #26474e;
+  align-items: center;
 }
 .form-group label {
   font-weight: bold;
+  align-items: center;
+  color: #26474e;
 }
 
 .form-group input,
