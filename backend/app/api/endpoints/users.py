@@ -38,7 +38,7 @@ async def create_user(
         )
     hash_pass = bcrypt.hashpw(user.password.encode("utf-8"), bcrypt.gensalt())
     user = models.UserCredentials(
-        username=user.username, password=str(hash_pass, "utf-8")
+        username=user.username, password=hash_pass
     )
     try:
         db.add(user)
@@ -62,9 +62,10 @@ async def get_users(db: Session = Depends(deps.get_session)):
 @router.post("/login", response_model=schemas.User)
 async def login(user: schemas.UserLogin, db: Session = Depends(deps.get_session)):
     user_m = models.UserCredentials
-    user_data = db.query(user_m).where(user_m.username == user.username).first()
+    user_data = db.query(user_m).where(
+        user_m.username == user.username).first()
     if not user_data or not bcrypt.checkpw(
-        user.password.encode("utf-8"), user_data.password.encode("utf-8")
+        user.password.encode("utf-8"), user_data.password
     ):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

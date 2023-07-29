@@ -21,18 +21,17 @@ depends_on = None
 def upgrade() -> None:
     conn = op.get_bind()
     usercredentals = conn.execute(sa.select(UserCredentials)).all()
-    conn.commit()
     op.drop_column("usercredentials", "password")
     op.add_column("usercredentials", sa.Column("password", sa.LargeBinary))
     for uc in usercredentals:
         conn.execute(
             sa.update(UserCredentials)
             .values(
-                password=bcrypt.hashpw(uc.password.encode("utf-8"), bcrypt.gensalt())
+                password=bcrypt.hashpw(
+                    uc.password.encode("utf-8"), bcrypt.gensalt())
             )
             .where(UserCredentials.id == uc.id)
         )
-        conn.commit()
 
 
 def downgrade() -> None:
