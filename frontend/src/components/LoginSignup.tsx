@@ -66,16 +66,16 @@ const registerFormSubmit: React.FormEventHandler<HTMLFormElement> = (
 const RegisterForm: React.FunctionComponent = () => {
   return (
     <form className={styles.form} onSubmit={registerFormSubmit}>
-      <label>
-        Username: <input type="text" id="username"></input>
+      <label className={styles.label}>
+        Username: <input className={styles.input} type="text" id="username"></input>
       </label>
       <br />
-      <label>
-        Password: <input type="password" id="password"></input>
+      <label className={styles.label}>
+        Password: <input className={styles.input} type="password" id="password"></input>
       </label>
       <br />
-      <label>
-        Confirm Password: <input type="password" id="password2"></input>
+      <label className={styles.label}>
+        Confirm Password: <input className={styles.input} type="password" id="password2"></input>
       </label>
       <br />
       <input type="submit" id="submit"></input>
