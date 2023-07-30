@@ -22,7 +22,7 @@ async def update_profile(
             detail="please enter a valid zipcode",
         )
 
-    client_information = models.ClientInformation(
+    client_information = db.merge(models.ClientInformation(
         userid=user_credentials.id,
         full_name=profile.full_name,
         address_1=profile.address_1,
@@ -30,8 +30,7 @@ async def update_profile(
         city=profile.city,
         state=profile.state,
         zipcode=profile.zipcode,
-    )
-    db.add(client_information)
+    ))
     db.commit()
 
     user_profile = schemas.UserProfile(
