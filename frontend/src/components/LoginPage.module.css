@@ -1,4 +1,4 @@
-body{
+body {
   height: 100vh;
 }
 
@@ -40,7 +40,6 @@ body{
   border: none;
   border-radius: 5px;
   position: relative;
-  
 }
 
 .submit:hover {

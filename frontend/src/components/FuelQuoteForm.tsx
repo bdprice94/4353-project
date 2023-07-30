@@ -56,14 +56,12 @@ const FuelQuoteForm: React.FC = () => {
 
   const username = getCookie("username");
   const fetchUserAddress = async () => {
-      if (address !== "") {
-          return
-      }
+    if (address !== "") {
+      return;
+    }
     const username = getCookie("username");
     try {
-      const response = await axios.get(
-        `${backendurl_profile}/${username}`,
-      );
+      const response = await axios.get(`${backendurl_profile}/${username}`);
       setAddress(response.data.address_1);
     } catch (error) {
       console.error(error);
@@ -135,7 +133,7 @@ const FuelQuoteForm: React.FC = () => {
           </div>
           <div>
             <label htmlFor="deliveryDate">Delivery Date:</label>
-            <input type="date" min="2020-01-01" max="2023-12-31"/>
+            <input type="date" min="2020-01-01" max="2023-12-31" />
           </div>
           <div>
             <label htmlFor="address">Delivery Address:</label>
