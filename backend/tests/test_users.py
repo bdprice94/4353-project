@@ -29,8 +29,7 @@ def test_get_users(client: TestClient, db_session: Session):
 def test_add_user(client: TestClient, db_session: Session):
     response = client.post(
         "/api/users/create_user",
-        json={"username": "Cat", "password": "Cat12356!",
-              "password2": "Cat12356!"},
+        json={"username": "Cat", "password": "Cat12356!", "password2": "Cat12356!"},
     )
 
     assert response.status_code == 201
@@ -49,8 +48,7 @@ def test_login(client: TestClient, db_session: Session):
         id=0,
         username="Professor Singh",
         password=bcrypt.hashpw(
-            "Super Secret Please Encode This".encode(
-                "utf-8"), bcrypt.gensalt()
+            "Super Secret Please Encode This".encode("utf-8"), bcrypt.gensalt()
         ),
     )
     db_session.add(professor)
@@ -74,8 +72,7 @@ def test_login(client: TestClient, db_session: Session):
 def test_user_full_circle(client: TestClient, db_session: Session):
     response = client.post(
         "/api/users/create_user",
-        json={"username": "Cat", "password": "Cat12356!",
-              "password2": "Cat12356!"},
+        json={"username": "Cat", "password": "Cat12356!", "password2": "Cat12356!"},
     )
 
     assert response.status_code == 201
@@ -96,15 +93,13 @@ def test_user_full_circle(client: TestClient, db_session: Session):
 def test_taken_username(client: TestClient, db_session: Session):
     response = client.post(
         "/api/users/create_user",
-        json={"username": "Cat", "password": "Cat12356!",
-              "password2": "Cat12356!"},
+        json={"username": "Cat", "password": "Cat12356!", "password2": "Cat12356!"},
     )
     assert response.status_code == 201
 
     response = client.post(
         "/api/users/create_user",
-        json={"username": "Cat", "password": "Cat12356!",
-              "password2": "Cat12356!"},
+        json={"username": "Cat", "password": "Cat12356!", "password2": "Cat12356!"},
     )
     assert response.status_code == 422
     assert response.json()["detail"] == "Username already exists"
@@ -154,8 +149,7 @@ def test_wrong_password(client: TestClient, db_session: Session):
         id=0,
         username="Professor Singh",
         password=bcrypt.hashpw(
-            "Super Secret Please Encode This".encode(
-                "utf-8"), bcrypt.gensalt()
+            "Super Secret Please Encode This".encode("utf-8"), bcrypt.gensalt()
         ),
     )
     db_session.add(professor)
@@ -180,8 +174,7 @@ def test_no_username(client: TestClient, db_session: Session):
 
 
 def test_no_password_login(client: TestClient, db_session: Session):
-    response = client.post(
-        "/api/users/login", json={"username": "Cat", "password": ""})
+    response = client.post("/api/users/login", json={"username": "Cat", "password": ""})
     assert response.status_code == 422
     assert response.json()["detail"][0]["msg"] == "Password must not be empty"
 
@@ -189,8 +182,7 @@ def test_no_password_login(client: TestClient, db_session: Session):
 def test_no_password_create(client: TestClient, db_session: Session):
     response = client.post(
         "/api/users/create_user",
-        json={"username": "Cat", "password": "",
-              "password2": "Hiasoiddaod!!11"},
+        json={"username": "Cat", "password": "", "password2": "Hiasoiddaod!!11"},
     )
 
     assert response.status_code == 422
