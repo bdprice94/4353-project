@@ -153,7 +153,10 @@ def test_get_price(client: TestClient, db_session: Session):
     )
 
     assert response.status_code == 200
-    assert response.json() == 820
+    assert response.json() == {
+        'price_per_gallon': 1.6400000000000001,
+        'total_price': 820.0000000000001
+    }
     # Price is 820
 
 
