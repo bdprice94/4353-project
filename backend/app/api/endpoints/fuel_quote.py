@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 import app.models as models
 import app.schemas as schemas
@@ -14,6 +14,12 @@ def calculate_suggested_price(
     db: Session,
     fuel_quote: schemas.FuelQuote,
 ):
+    if fuel_quote.gallons_requested < 1:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Your fuel quote must be 1 gallon or more"
+        )
+
     base_price = 1.5
 
     if client_information.state == "TX":
