@@ -124,8 +124,9 @@ def test_get_fuelquote(client: TestClient, db_session: Session):
     add_fake_client_info(db_session)
     add_fake_quote(db_session)
 
-    response = client.get("/api/fuel_quote/RegularUser",
-                          cookies={"username": "RegularUser"})
+    response = client.get(
+        "/api/fuel_quote/RegularUser", cookies={"username": "RegularUser"}
+    )
     assert response.status_code == 200
     assert response.json() == [
         {
@@ -135,3 +136,70 @@ def test_get_fuelquote(client: TestClient, db_session: Session):
             "delivery_date": "2023-07-31",
         }
     ]
+
+
+def test_get_price(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    add_fake_client_info(db_session)
+    response = client.post(
+        "/api/fuel_quote/price",
+        json={
+            "username": "RegularUser",
+            "gallons_requested": 500,
+            "delivery_address": "123 Test Street",
+            "delivery_date": "2023-08-01",
+        },
+        cookies={"username": "RegularUser"},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == 820
+    # Price is 820
+
+
+def test_get_price_no_profile(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    response = client.post(
+        "/api/fuel_quote/price",
+        json={
+            "username": "RegularUser",
+            "gallons_requested": 500,
+            "delivery_address": "123 Test Street",
+            "delivery_date": "2023-08-01",
+        },
+        cookies={"username": "RegularUser"},
+    )
+
+    assert response.status_code == 403
+
+
+def test_get_price_invalid_user(client: TestClient, db_session: Session):
+    response = client.post(
+        "/api/fuel_quote/price",
+        json={
+            "username": "RegularUser",
+            "gallons_requested": 500,
+            "delivery_address": "123 Test Street",
+            "delivery_date": "2023-08-01",
+        },
+        cookies={"username": "RegularUser"},
+    )
+
+    assert response.status_code == 403
+
+
+def test_get_price_invalid_form(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    add_fake_client_info(db_session)
+
+    response = client.post(
+        "/api/fuel_quote/price",
+        json={
+            "username": "RegularUser",
+            "gallons_requested": -500,
+            "delivery_address": "123 Test Street",
+            "delivery_date": "2023-08-01",
+        },
+        cookies={"username": "RegularUser"},
+    )
+    assert response.status_code == 400

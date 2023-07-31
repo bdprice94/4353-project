@@ -17,13 +17,13 @@ def calculate_suggested_price(
     if fuel_quote.gallons_requested < 1:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Your fuel quote must be 1 gallon or more"
+            detail="Your fuel quote must be 1 gallon or more",
         )
 
     if client_information.state is None:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Your profile must have a state setup"
+            detail="Your profile must have a state setup",
         )
 
     base_price = 1.5
@@ -52,14 +52,13 @@ def calculate_suggested_price(
 @router.post("/", response_model=schemas.FuelQuote)
 async def submit_fuelquote_form(
     fuel_quote: schemas.FuelQuote,
-    user_credentials: models.UserCredentials = Depends(
-        deps.get_user_credentials),
-    client_information: models.ClientInformation = Depends(
-        deps.get_client_information),
+    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
+    client_information: models.ClientInformation = Depends(deps.get_client_information),
     db: Session = Depends(deps.get_session),
 ):
     suggested_price = calculate_suggested_price(
-        client_information, user_credentials, db, fuel_quote)
+        client_information, user_credentials, db, fuel_quote
+    )
 
     fuel_quote_model = models.FuelQuote(
         username=fuel_quote.username,
@@ -76,8 +75,7 @@ async def submit_fuelquote_form(
 
 @router.get("/{username}", response_model=List[schemas.FuelQuote])
 async def get_fuelquotes(
-    user_credentials: models.UserCredentials = Depends(
-        deps.get_user_credentials),
+    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
     db: Session = Depends(deps.get_session),
 ):
     fuel_quotes = (
@@ -91,13 +89,12 @@ async def get_fuelquotes(
 @router.post("/price")
 def get_fuel_price(
     fuel_quote: schemas.FuelQuote,
-    user_credentials: models.UserCredentials = Depends(
-        deps.get_user_credentials),
-    client_information: models.ClientInformation = Depends(
-        deps.get_client_information),
+    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
+    client_information: models.ClientInformation = Depends(deps.get_client_information),
     db: Session = Depends(deps.get_session),
 ) -> int:
     suggested_price = calculate_suggested_price(
-        client_information, user_credentials, db, fuel_quote)
+        client_information, user_credentials, db, fuel_quote
+    )
 
     return suggested_price * fuel_quote.gallons_requested
