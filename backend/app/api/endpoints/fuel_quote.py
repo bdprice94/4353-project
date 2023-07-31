@@ -61,7 +61,7 @@ async def submit_fuelquote_form(
     )
 
     fuel_quote_model = models.FuelQuote(
-        username=fuel_quote.username,
+        username=user_credentials.username,
         gallons_requested=fuel_quote.gallons_requested,
         delivery_address=fuel_quote.delivery_address,
         delivery_date=fuel_quote.delivery_date,
