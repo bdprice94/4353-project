@@ -160,6 +160,7 @@ const UserProfileForm: React.FC = () => {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               maxLength={50}
+              
             />
           </div>
           <div className={styles.formgroup}>
@@ -170,6 +171,7 @@ const UserProfileForm: React.FC = () => {
               value={address1}
               onChange={(e) => setAddress1(e.target.value)}
               maxLength={100}
+              
             />
           </div>
           <div className={styles.formgroup}>
@@ -180,6 +182,7 @@ const UserProfileForm: React.FC = () => {
               value={address2}
               onChange={(e) => setAddress2(e.target.value)}
               maxLength={100}
+              
             />
           </div>
           <div className={styles.formgroup}>
@@ -198,6 +201,7 @@ const UserProfileForm: React.FC = () => {
               id="state"
               value={state}
               onChange={(e) => setState(e.target.value)}
+              
             >
               <option value="">Select a state</option>
               {states.map((s) => (
@@ -216,6 +220,7 @@ const UserProfileForm: React.FC = () => {
               onChange={(e) => setZipCode(e.target.value)}
               minLength={5}
               maxLength={9}
+              required
             />
           </div>
           <button type="submit">Submit</button>

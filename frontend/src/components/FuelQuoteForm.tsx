@@ -160,14 +160,19 @@ const FuelQuoteForm: React.FC = () => {
             <label htmlFor="quantity">Gallons Requested:</label>
             <input
               type="number"
-              id="quantity"
-              value={quantity}
-              onChange={handleQuantityChange}
+
+              id="quanity"
+              value={quanity}
+              onChange={handleQuanityChange}
+              required
+
             />
           </div>
           <div>
             <label htmlFor="deliveryDate">Delivery Date:</label>
-            <input type="date" min="2020-01-01" max="2023-12-31" />
+
+            <input type="date" min="2020-01-01" max="2023-12-31" required/>
+
           </div>
           <div>
             <label htmlFor="address">Delivery Address:</label>
