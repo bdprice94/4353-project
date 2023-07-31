@@ -52,10 +52,8 @@ def calculate_suggested_price(
 @router.post("/", response_model=schemas.FuelQuote)
 async def submit_fuelquote_form(
     fuel_quote: schemas.FuelQuote,
-    user_credentials: models.UserCredentials = Depends(
-        deps.get_user_credentials),
-    client_information: models.ClientInformation = Depends(
-        deps.get_client_information),
+    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
+    client_information: models.ClientInformation = Depends(deps.get_client_information),
     db: Session = Depends(deps.get_session),
 ):
     suggested_price = calculate_suggested_price(
@@ -77,8 +75,7 @@ async def submit_fuelquote_form(
 
 @router.get("/{username}", response_model=List[schemas.FuelQuote])
 async def get_fuelquotes(
-    user_credentials: models.UserCredentials = Depends(
-        deps.get_user_credentials),
+    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
     db: Session = Depends(deps.get_session),
 ):
     fuel_quotes = (
@@ -92,10 +89,8 @@ async def get_fuelquotes(
 @router.post("/price")
 def get_fuel_price(
     fuel_quote: schemas.FuelQuote,
-    user_credentials: models.UserCredentials = Depends(
-        deps.get_user_credentials),
-    client_information: models.ClientInformation = Depends(
-        deps.get_client_information),
+    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
+    client_information: models.ClientInformation = Depends(deps.get_client_information),
     db: Session = Depends(deps.get_session),
 ):
     suggested_price = calculate_suggested_price(
@@ -103,6 +98,6 @@ def get_fuel_price(
     )
 
     return {
-        'total_price': suggested_price * fuel_quote.gallons_requested,
-        'price_per_gallon': suggested_price
+        "total_price": suggested_price * fuel_quote.gallons_requested,
+        "price_per_gallon": suggested_price,
     }
