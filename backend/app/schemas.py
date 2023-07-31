@@ -39,8 +39,6 @@ class FuelQuote(BaseModel):
     gallons_requested: int
     delivery_address: str
     delivery_date: str
-    suggested_price: int
-    total_amount_due: int
 
     class Config:
         orm_mode = True

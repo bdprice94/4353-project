@@ -8,6 +8,35 @@ from app.api import deps
 router = APIRouter()
 
 
+def calculate_suggested_price(
+    client_information: models.ClientInformation,
+    user_credentials: models.UserCredentials,
+    db: Session,
+    fuel_quote: schemas.FuelQuote,
+):
+    base_price = 1.5
+
+    if client_information.state == "TX":
+        base_price += 0.02
+    else:
+        base_price += 0.04
+
+    user_history = db.query(models.FuelQuote).where(
+        models.FuelQuote.username == user_credentials.username
+    )
+    if user_history:
+        base_price -= 0.01
+
+    if fuel_quote.gallons_requested > 1000:
+        base_price += 0.02
+    else:
+        base_price += 0.03
+
+    # Company profits. We are told to always add this.
+    base_price += 0.1
+    return base_price
+
+
 @router.post("/", response_model=schemas.FuelQuote)
 async def submit_fuelquote_form(
     fuel_quote: schemas.FuelQuote,
@@ -17,13 +46,16 @@ async def submit_fuelquote_form(
         deps.get_client_information),
     db: Session = Depends(deps.get_session),
 ):
+    suggested_price = calculate_suggested_price(
+        client_information, user_credentials, db, fuel_quote)
+
     fuel_quote_model = models.FuelQuote(
         username=fuel_quote.username,
         gallons_requested=fuel_quote.gallons_requested,
         delivery_address=fuel_quote.delivery_address,
         delivery_date=fuel_quote.delivery_date,
-        suggested_price=fuel_quote.suggested_price,
-        total_amount_due=fuel_quote.total_amount_due,
+        suggested_price=suggested_price,
+        total_amount_due=suggested_price * fuel_quote.gallons_requested,
     )
     db.add(fuel_quote_model)
     db.commit()
@@ -53,24 +85,7 @@ def get_fuel_price(
         deps.get_client_information),
     db: Session = Depends(deps.get_session),
 ) -> int:
-    base_price = 1.5
+    suggested_price = calculate_suggested_price(
+        client_information, user_credentials, db, fuel_quote)
 
-    if client_information.state == "TX":
-        base_price += .02
-    else:
-        base_price += .04
-
-    user_history = db.query(models.FuelQuote).where(
-        models.FuelQuote.username == user_credentials.username)
-    if user_history:
-        base_price -= .01
-
-    if fuel_quote.gallons_requested > 1000:
-        base_price += .02
-    else:
-        base_price += .03
-
-    # Company profits. We are told to always add this.
-    base_price += .1
-
-    return base_price * fuel_quote.gallons_requested
+    return suggested_price * fuel_quote.gallons_requested
