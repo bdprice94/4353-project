@@ -72,12 +72,14 @@ const FuelQuoteForm: React.FC = () => {
       suggested_price: { value: Number(price) },
       total_amount_due: { value: Number(totalAmount) },
     };
-  }
+  };
 
-  const handleQuantityChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleQuantityChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     if (Number(e.target.value) < 1) {
-      setQuantity("1")
-      return
+      setQuantity("1");
+      return;
     }
 
     setQuantity(e.target.value);
@@ -88,13 +90,16 @@ const FuelQuoteForm: React.FC = () => {
     const preliminaryCost = await axios
       .post<FuelQuote>(`${backendurl}/fuel_quote/price`, fuelquoteModel)
       .catch((e: AxiosError) => {
-        let errString =
-          "Make sure your profile is setup";
+        let errString = "Make sure your profile is setup";
         if ("response" in e && e.response !== undefined) {
           if (e.response.status === 422) {
             const data = e.response.data as { detail: Array<string> };
             errString = data.detail.map((err: any) => err.msg).join("\n");
-          } else if (e.response.status === 404 || e.response.status === 403 || e.response.status === 400) {
+          } else if (
+            e.response.status === 404 ||
+            e.response.status === 403 ||
+            e.response.status === 400
+          ) {
             const data = e.response.data as { detail: string };
             errString = data.detail;
           } else {
@@ -106,11 +111,10 @@ const FuelQuoteForm: React.FC = () => {
         alert(errString);
       });
 
-
     if (preliminaryCost) {
-      const data = preliminaryCost.data
-      setPrice(String(data.suggested_price))
-      setTotalAmount(String(data.total_amount_due))
+      const data = preliminaryCost.data;
+      setPrice(String(data.suggested_price));
+      setTotalAmount(String(data.total_amount_due));
     }
   };
 
@@ -177,13 +181,7 @@ const FuelQuoteForm: React.FC = () => {
           </div>
           <div>
             <label htmlFor="price">Suggested Price:</label>
-            <input
-              type="number"
-              id="price"
-              value={price}
-              readOnly
-              disabled
-            />
+            <input type="number" id="price" value={price} readOnly disabled />
           </div>
           <div>
             <label htmlFor="totalAmount">Total Amount Due:</label>
