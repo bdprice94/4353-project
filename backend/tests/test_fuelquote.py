@@ -134,6 +134,8 @@ def test_get_fuelquote(client: TestClient, db_session: Session):
             "gallons_requested": 1000,
             "delivery_address": "123 Test Street",
             "delivery_date": "2023-07-31",
+            "suggested_price": 2,
+            "total_amount_due": 2000,
         }
     ]
 
@@ -154,8 +156,12 @@ def test_get_price(client: TestClient, db_session: Session):
 
     assert response.status_code == 200
     assert response.json() == {
-        "price_per_gallon": 1.6400000000000001,
-        "total_price": 820.0000000000001,
+        "username": "RegularUser",
+        "gallons_requested": 500,
+        "delivery_address": "123 Test Street",
+        "delivery_date": "2023-08-01",
+        "suggested_price": 1.6400000000000001,
+        "total_amount_due": 820.0000000000001,
     }
     # Price is 820
 

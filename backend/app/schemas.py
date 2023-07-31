@@ -34,11 +34,16 @@ class UserCreate(UserBase):
         return v
 
 
-class FuelQuote(BaseModel):
+class FuelForm(BaseModel):
     username: str
     gallons_requested: int
     delivery_address: str
     delivery_date: str
+
+
+class FuelQuote(FuelForm):
+    suggested_price: float
+    total_amount_due: float
 
     class Config:
         orm_mode = True

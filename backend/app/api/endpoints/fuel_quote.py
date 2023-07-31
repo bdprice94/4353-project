@@ -12,7 +12,7 @@ def calculate_suggested_price(
     client_information: models.ClientInformation,
     user_credentials: models.UserCredentials,
     db: Session,
-    fuel_quote: schemas.FuelQuote,
+    fuel_quote: schemas.FuelForm,
 ):
     if fuel_quote.gallons_requested < 1:
         raise HTTPException(
@@ -49,9 +49,9 @@ def calculate_suggested_price(
     return base_price
 
 
-@router.post("/", response_model=schemas.FuelQuote)
+@router.post("/", response_model=schemas.FuelForm)
 async def submit_fuelquote_form(
-    fuel_quote: schemas.FuelQuote,
+    fuel_quote: schemas.FuelForm,
     user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
     client_information: models.ClientInformation = Depends(deps.get_client_information),
     db: Session = Depends(deps.get_session),
@@ -86,9 +86,9 @@ async def get_fuelquotes(
     return fuel_quotes
 
 
-@router.post("/price")
+@router.post("/price", response_model=schemas.FuelQuote)
 def get_fuel_price(
-    fuel_quote: schemas.FuelQuote,
+    fuel_quote: schemas.FuelForm,
     user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
     client_information: models.ClientInformation = Depends(deps.get_client_information),
     db: Session = Depends(deps.get_session),
@@ -97,7 +97,13 @@ def get_fuel_price(
         client_information, user_credentials, db, fuel_quote
     )
 
-    return {
-        "total_price": suggested_price * fuel_quote.gallons_requested,
-        "price_per_gallon": suggested_price,
-    }
+    fuel_quote = schemas.FuelQuote(
+        username=fuel_quote.username,
+        gallons_requested=fuel_quote.gallons_requested,
+        delivery_address=fuel_quote.delivery_address,
+        delivery_date=fuel_quote.delivery_date,
+        suggested_price=suggested_price,
+        total_amount_due=suggested_price * fuel_quote.gallons_requested,
+    )
+
+    return fuel_quote
