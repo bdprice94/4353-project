@@ -49,7 +49,7 @@ def get_client_information(
     user_credentials: UserCredentials = Depends(get_user_credentials),
     db: Session = Depends(get_session),
 ) -> ClientInformation:
-    user_information = (
+    user_information: ClientInformation = (
         db.query(ClientInformation)
         .where(ClientInformation.userid == user_credentials.id)
         .scalar()
@@ -58,6 +58,18 @@ def get_client_information(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Client information does not exist",
+        )
+
+    if (
+        user_information.address_1 is None
+        or user_information.state is None
+        or user_information.city is None
+        or user_information.zipcode is None
+        or user_information.full_name is None
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please finish setting up your profile information",
         )
 
     return user_information
