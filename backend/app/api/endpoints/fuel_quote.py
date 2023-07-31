@@ -20,6 +20,12 @@ def calculate_suggested_price(
             detail="Your fuel quote must be 1 gallon or more"
         )
 
+    if client_information.state is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Your profile must have a state setup"
+        )
+
     base_price = 1.5
 
     if client_information.state == "TX":
