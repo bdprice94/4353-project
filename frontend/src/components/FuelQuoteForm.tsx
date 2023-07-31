@@ -162,8 +162,8 @@ const FuelQuoteForm: React.FC = () => {
               type="number"
 
               id="quanity"
-              value={quanity}
-              onChange={handleQuanityChange}
+              value={quantity}
+              onChange={handleQuantityChange}
               required
 
             />
