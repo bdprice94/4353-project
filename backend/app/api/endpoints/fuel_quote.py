@@ -11,8 +11,10 @@ router = APIRouter()
 @router.post("/", response_model=schemas.FuelQuote)
 async def submit_fuelquote_form(
     fuel_quote: schemas.FuelQuote,
-    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
-    client_information: models.ClientInformation = Depends(deps.get_client_information),
+    user_credentials: models.UserCredentials = Depends(
+        deps.get_user_credentials),
+    client_information: models.ClientInformation = Depends(
+        deps.get_client_information),
     db: Session = Depends(deps.get_session),
 ):
     fuel_quote_model = models.FuelQuote(
@@ -30,7 +32,8 @@ async def submit_fuelquote_form(
 
 @router.get("/{username}", response_model=List[schemas.FuelQuote])
 async def get_fuelquotes(
-    user_credentials: models.UserCredentials = Depends(deps.get_user_credentials),
+    user_credentials: models.UserCredentials = Depends(
+        deps.get_user_credentials),
     db: Session = Depends(deps.get_session),
 ):
     fuel_quotes = (
@@ -39,3 +42,35 @@ async def get_fuelquotes(
         .all()
     )
     return fuel_quotes
+
+
+@router.post("/price")
+def get_fuel_price(
+    fuel_quote: schemas.FuelQuote,
+    user_credentials: models.UserCredentials = Depends(
+        deps.get_user_credentials),
+    client_information: models.ClientInformation = Depends(
+        deps.get_client_information),
+    db: Session = Depends(deps.get_session),
+) -> int:
+    base_price = 1.5
+
+    if client_information.state == "TX":
+        base_price += .02
+    else:
+        base_price += .04
+
+    user_history = db.query(models.FuelQuote).where(
+        models.FuelQuote.username == user_credentials.username)
+    if user_history:
+        base_price -= .01
+
+    if fuel_quote.gallons_requested > 1000:
+        base_price += .02
+    else:
+        base_price += .03
+
+    # Company profits. We are told to always add this.
+    base_price += .1
+
+    return base_price * fuel_quote.gallons_requested
