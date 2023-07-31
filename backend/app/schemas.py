@@ -41,7 +41,7 @@ class FuelQuote(BaseModel):
     delivery_date: str
     suggested_price: int
     total_amount_due: int
-
+    
     class Config:
         orm_mode = True
 
@@ -60,3 +60,9 @@ class UserProfile(UserBase):
     city: str
     state: str
     zipcode: int
+    @validator("full_name", "address_1","city","state",each_item=True)
+    def profile_must_not_be_empty(cls, v,field):
+        if len(v) < 1:
+            raise ValueError(f"Uh Oh! {field.name} must not be empty")
+        return v
+    
