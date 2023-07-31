@@ -24,8 +24,6 @@ export interface FuelQuoteForm {
   gallons_requested: { value: number };
   delivery_address: { value: string };
   delivery_date: { value: string };
-  suggested_price: { value: number };
-  total_amount_due: { value: number };
 }
 
 export interface FuelQuote {
@@ -41,14 +39,12 @@ const convertFormToModel = (form: FuelQuoteForm) => {
     gallons_requested: form.gallons_requested.value,
     delivery_address: form.delivery_address.value,
     delivery_date: form.delivery_date.value,
-    suggested_price: form.suggested_price.value,
-    total_amount_due: form.total_amount_due.value,
   };
 };
 
 const FuelQuoteForm: React.FC = () => {
   const backendurl_profile = `${backendurl}/profile`;
-  const [quanity, setQuanity] = useState("");
+  const [quantity, setQuantity] = useState("1");
   const [address, setAddress] = useState("");
   const [price, setPrice] = useState("5");
   const [totalAmount, setTotalAmount] = useState("");
@@ -56,43 +52,75 @@ const FuelQuoteForm: React.FC = () => {
 
   const username = getCookie("username");
   const fetchUserAddress = async () => {
-      if (address !== "") {
-          return
-      }
+    if (address !== "") {
+      return;
+    }
     const username = getCookie("username");
     try {
-      const response = await axios.get(
-        `${backendurl_profile}/${username}`,
-      );
+      const response = await axios.get(`${backendurl_profile}/${username}`);
       setAddress(response.data.address_1);
     } catch (error) {
       console.error(error);
     }
   };
-  useEffect(() => {
-    fetchUserAddress();
-  }, []);
-  const calculateTotalAmount = (price: string, quanity: string) => {
-    return Number(price) * Number(quanity);
-  };
 
-  const handleQuanityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuanity(e.target.value);
-    const newTotalAmount = calculateTotalAmount(price, e.target.value);
-    setTotalAmount(newTotalAmount.toString());
-  };
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const target = e.target as typeof e.target & FuelQuoteForm;
-    const fuelquote = {
-      gallons_requested: { value: Number(quanity) },
+  const getFuelForm = () => {
+    return {
+      gallons_requested: { value: Number(quantity) },
       delivery_address: { value: address },
       delivery_date: { value: deliveryDate.toDateString() },
       suggested_price: { value: Number(price) },
       total_amount_due: { value: Number(totalAmount) },
     };
-    console.log(fuelquote);
-    const fuelquoteModel = convertFormToModel(fuelquote);
+  };
+
+  const handleQuantityChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (Number(e.target.value) < 1) {
+      setQuantity("1");
+      return;
+    }
+
+    setQuantity(e.target.value);
+
+    const fuelquoteModel = convertFormToModel(getFuelForm());
+    fuelquoteModel.gallons_requested = Number(e.target.value);
+
+    const preliminaryCost = await axios
+      .post<FuelQuote>(`${backendurl}/fuel_quote/price`, fuelquoteModel)
+      .catch((e: AxiosError) => {
+        let errString = "Make sure your profile is setup";
+        if ("response" in e && e.response !== undefined) {
+          if (e.response.status === 422) {
+            const data = e.response.data as { detail: Array<string> };
+            errString = data.detail.map((err: any) => err.msg).join("\n");
+          } else if (
+            e.response.status === 404 ||
+            e.response.status === 403 ||
+            e.response.status === 400
+          ) {
+            const data = e.response.data as { detail: string };
+            errString = data.detail;
+          } else {
+            console.log(e.response.data);
+          }
+        } else {
+          console.log(e);
+        }
+        alert(errString);
+      });
+
+    if (preliminaryCost) {
+      const data = preliminaryCost.data;
+      setPrice(String(data.suggested_price));
+      setTotalAmount(String(data.total_amount_due));
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const fuelquoteModel = convertFormToModel(getFuelForm());
     axios
       .post(`${backendurl}/fuel_quote/`, fuelquoteModel)
       .then((response) => {
@@ -118,6 +146,10 @@ const FuelQuoteForm: React.FC = () => {
       });
   };
 
+  useEffect(() => {
+    fetchUserAddress();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -125,18 +157,22 @@ const FuelQuoteForm: React.FC = () => {
         <h1>Fuel Quote Form</h1>
         <form onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="quanity">Gallons Requested:</label>
+            <label htmlFor="quantity">Gallons Requested:</label>
             <input
               type="number"
+
               id="quanity"
               value={quanity}
               onChange={handleQuanityChange}
               required
+
             />
           </div>
           <div>
             <label htmlFor="deliveryDate">Delivery Date:</label>
+
             <input type="date" min="2020-01-01" max="2023-12-31" required/>
+
           </div>
           <div>
             <label htmlFor="address">Delivery Address:</label>
@@ -150,13 +186,7 @@ const FuelQuoteForm: React.FC = () => {
           </div>
           <div>
             <label htmlFor="price">Suggested Price:</label>
-            <input
-              type="number"
-              id="price"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              readOnly
-            />
+            <input type="number" id="price" value={price} readOnly disabled />
           </div>
           <div>
             <label htmlFor="totalAmount">Total Amount Due:</label>
@@ -164,8 +194,8 @@ const FuelQuoteForm: React.FC = () => {
               type="number"
               id="totalAmount"
               value={totalAmount}
-              onChange={(e) => setTotalAmount(e.target.value)}
               readOnly
+              disabled
             />
           </div>
           <button type="submit">Submit</button>

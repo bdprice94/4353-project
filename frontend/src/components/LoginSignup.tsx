@@ -67,15 +67,18 @@ const RegisterForm: React.FunctionComponent = () => {
   return (
     <form className={styles.form} onSubmit={registerFormSubmit}>
       <label className={styles.label}>
-        Username: <input className={styles.input} type="text" id="username"></input>
+        Username:{" "}
+        <input className={styles.input} type="text" id="username"></input>
       </label>
       <br />
       <label className={styles.label}>
-        Password: <input className={styles.input} type="password" id="password"></input>
+        Password:{" "}
+        <input className={styles.input} type="password" id="password"></input>
       </label>
       <br />
       <label className={styles.label}>
-        Confirm Password: <input className={styles.input} type="password" id="password2"></input>
+        Confirm Password:{" "}
+        <input className={styles.input} type="password" id="password2"></input>
       </label>
       <br />
       <input type="submit" id="submit"></input>

@@ -27,8 +27,7 @@ def upgrade() -> None:
         conn.execute(
             sa.update(UserCredentials)
             .values(
-                password=bcrypt.hashpw(
-                    uc.password.encode("utf-8"), bcrypt.gensalt())
+                password=bcrypt.hashpw(uc.password.encode("utf-8"), bcrypt.gensalt())
             )
             .where(UserCredentials.id == uc.id)
         )

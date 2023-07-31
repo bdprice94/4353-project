@@ -5,20 +5,22 @@ import app.models as models
 import bcrypt
 
 
-def test_submit_fuelquote_form(client: TestClient, db_session: Session):
-    # testing fuel quote submit
-    queen = models.UserCredentials(
+def add_fake_user(db_session: Session):
+    user = models.UserCredentials(
         id=0,
-        username="cairo",
+        username="RegularUser",
         password=bcrypt.hashpw(
             "Super Secret Please Encode This".encode("utf-8"), bcrypt.gensalt()
         ),
     )
-    db_session.add(queen)
+    db_session.add(user)
     db_session.commit()
+
+
+def add_fake_client_info(db_session: Session):
     profile = models.ClientInformation(
         userid=0,
-        full_name="Cairo A",
+        full_name="Regular Username",
         address_1="123 Test Street",
         address_2="Moody Towers",
         city="Houston",
@@ -27,114 +29,186 @@ def test_submit_fuelquote_form(client: TestClient, db_session: Session):
     )
     db_session.add(profile)
     db_session.commit()
+
+
+def add_fake_quote(db_session: Session):
+    fuelquote = models.FuelQuote(
+        id=0,
+        username="RegularUser",
+        gallons_requested=1000,
+        delivery_address="123 Test Street",
+        delivery_date="2023-07-31",
+        suggested_price=2,
+        total_amount_due=2000,
+    )
+    db_session.add(fuelquote)
+    db_session.commit()
+
+
+def test_submit_form(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    add_fake_client_info(db_session)
+
     response = client.post(
         "/api/fuel_quote/",
         json={
-            "username": "cairo",
+            "username": "RegularUser",
             "gallons_requested": 500,
             "delivery_address": "123 Test Street",
             "delivery_date": "2023-08-01",
-            "suggested_price": 2,
-            "total_amount_due": 1200,
         },
-        cookies={"username": "cairo"},
+        cookies={"username": "RegularUser"},
     )
     assert response.status_code == 200
     assert response.json() == {
-        "username": "cairo",
+        "username": "RegularUser",
         "gallons_requested": 500,
         "delivery_address": "123 Test Street",
         "delivery_date": "2023-08-01",
-        "suggested_price": 2,
-        "total_amount_due": 1200,
     }
-    # testing errror for if user hasnt created profile yet
-    rat = models.UserCredentials(
-        id=1,
-        username="rat",
-        password=bcrypt.hashpw(
-            "Super Secret Please Encode This".encode("utf-8"), bcrypt.gensalt()
-        ),
-    )
-    db_session.add(rat)
-    db_session.commit()
+
+
+def test_form_no_profile(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
 
     response = client.post(
         "/api/fuel_quote/",
         json={
-            "username": "rat",
+            "username": "RegularUser",
             "gallons_requested": 500,
             "delivery_address": "123 Test Street",
             "delivery_date": "2023-08-01",
-            "suggested_price": 2,
-            "total_amount_due": 1200,
         },
-        cookies={"username": "rat"},
+        cookies={"username": "RegularUser"},
     )
     assert response.status_code == 403
 
-    # testing error for missing fields
+
+def test_missing_fields(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    add_fake_client_info(db_session)
+
     response = client.post(
         "/api/fuel_quote/",
         json={
-            "username": "cairo",
+            "username": "RegularUser",
             "gallons_requested": 500,
             "delivery_date": "2023-08-01",
-            "suggested_price": 2,
-            "total_amount_due": 1200,
+            # Missing delivery address
         },
-        cookies={"username": "cairo"},
+        cookies={"username": "RegularUser"},
     )
     assert response.status_code == 422
 
-    # testing error if user doesnt have account yet
+
+def test_user_does_not_exist(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    add_fake_client_info(db_session)
+
     response = client.post(
         "/api/fuel_quote/",
         json={
-            "username": "lanisdeodarant",
+            "username": "DoesNotExist",
             "gallons_requested": 500,
             "delivery_address": "nowhere st",
             "delivery_date": "2023-08-01",
-            "suggested_price": 2,
-            "total_amount_due": 1200,
         },
-        cookies={"username": "lanisdeodorant"},
+        cookies={"username": "DoesNotExist"},
     )
     assert response.status_code == 403
     assert response.json() == {"detail": "Username does not exist"}
 
 
-def test_get_fuelquotes_by_user(client: TestClient, db_session: Session):
+def test_get_fuelquote(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    add_fake_client_info(db_session)
+    add_fake_quote(db_session)
 
-    queen = models.UserCredentials(
-        id=0,
-        username="Cairo",
-        password=bcrypt.hashpw(
-            "Super Secret Please Encode This".encode("utf-8"), bcrypt.gensalt()
-        ),
+    response = client.get(
+        "/api/fuel_quote/RegularUser", cookies={"username": "RegularUser"}
     )
-    db_session.add(queen)
-    db_session.commit()
-    fuelquote = models.FuelQuote(
-        id=0,
-        username="Cairo",
-        gallons_requested=1000,
-        delivery_address="123 Test Street",
-        delivery_date="2023-07-31",
-        suggested_price=2,
-        total_amount_due=2500,
-    )
-    db_session.add(fuelquote)
-    db_session.commit()
-    response = client.get("/api/fuel_quote/Cairo", cookies={"username": "Cairo"})
     assert response.status_code == 200
     assert response.json() == [
         {
-            "username": "Cairo",
+            "username": "RegularUser",
             "gallons_requested": 1000,
             "delivery_address": "123 Test Street",
             "delivery_date": "2023-07-31",
             "suggested_price": 2,
-            "total_amount_due": 2500,
+            "total_amount_due": 2000,
         }
     ]
+
+
+def test_get_price(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    add_fake_client_info(db_session)
+    response = client.post(
+        "/api/fuel_quote/price",
+        json={
+            "username": "RegularUser",
+            "gallons_requested": 500,
+            "delivery_address": "123 Test Street",
+            "delivery_date": "2023-08-01",
+        },
+        cookies={"username": "RegularUser"},
+    )
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "username": "RegularUser",
+        "gallons_requested": 500,
+        "delivery_address": "123 Test Street",
+        "delivery_date": "2023-08-01",
+        "suggested_price": 1.6400000000000001,
+        "total_amount_due": 820.0000000000001,
+    }
+    # Price is 820
+
+
+def test_get_price_no_profile(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    response = client.post(
+        "/api/fuel_quote/price",
+        json={
+            "username": "RegularUser",
+            "gallons_requested": 500,
+            "delivery_address": "123 Test Street",
+            "delivery_date": "2023-08-01",
+        },
+        cookies={"username": "RegularUser"},
+    )
+
+    assert response.status_code == 403
+
+
+def test_get_price_invalid_user(client: TestClient, db_session: Session):
+    response = client.post(
+        "/api/fuel_quote/price",
+        json={
+            "username": "RegularUser",
+            "gallons_requested": 500,
+            "delivery_address": "123 Test Street",
+            "delivery_date": "2023-08-01",
+        },
+        cookies={"username": "RegularUser"},
+    )
+
+    assert response.status_code == 403
+
+
+def test_get_price_invalid_form(client: TestClient, db_session: Session):
+    add_fake_user(db_session)
+    add_fake_client_info(db_session)
+
+    response = client.post(
+        "/api/fuel_quote/price",
+        json={
+            "username": "RegularUser",
+            "gallons_requested": -500,
+            "delivery_address": "123 Test Street",
+            "delivery_date": "2023-08-01",
+        },
+        cookies={"username": "RegularUser"},
+    )
+    assert response.status_code == 400
